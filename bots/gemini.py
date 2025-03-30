@@ -158,7 +158,6 @@ def get_gemini_image_to_image(chat : ChatContext):
         chat.reply(
             f"오류가 발생하였거나, Gemini가 이미지 생성을 거부하였습니다.\n"
             f"Q: {chat.message.msg[4:]}"
-<<<<<<< HEAD
         )
 
 def get_gemini_vision_analyze_image(url):
@@ -175,6 +174,3 @@ def get_gemini_vision_analyze_image(url):
     except:
         result = "Gemini 서버에서 오류가 발생했거나 분당 한도가 초과하였습니다. 잠시 후 다시 시도해주세요."
     return result
-=======
-        )
->>>>>>> 7ba5854 (Initial commit)

@@ -4,7 +4,6 @@ from bots.gemini import get_gemini_image, get_gemini_image_to_image
 from bots.pyeval import python_eval, real_eval
 from bots.stock import create_stock_image
 from bots.imagen import get_imagen
-<<<<<<< HEAD
 from bots.lyrics import get_lyrics, find_lyrics
 from helper.Admin import is_not_banned, on_message_chat_addon
 from helper.BanControl import ban_user, unban_user
@@ -14,14 +13,6 @@ import sys
 
 iris_url = sys.argv[1]
 bot = BotManager(iris_url).get_current_bot()
-=======
-from helper.Admin import is_not_banned, on_message_chat_addon
-from helper.BanControl import ban_user, unban_user
-from helper.BotManager import BotManager
-import sys
-
-bot = BotManager().get_current_bot()
->>>>>>> 7ba5854 (Initial commit)
 
 @bot.on_event("message")
 @is_not_banned()
@@ -66,7 +57,6 @@ def on_message(chat: ChatContext):
             case "!ig":
                 get_imagen(chat)
             
-<<<<<<< HEAD
             case "!가사찾기":
                 find_lyrics(chat)
 
@@ -76,8 +66,6 @@ def on_message(chat: ChatContext):
             case "!텍스트" | "!사진" | "!껄무새" | "!멈춰" | "!지워" | "!진행" | "!말대꾸" | "!텍스트추가":
                 draw_text(chat)
             
-=======
->>>>>>> 7ba5854 (Initial commit)
     except Exception as e :
         print(e)
     finally:

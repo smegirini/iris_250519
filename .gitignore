@@ -1,13 +1,9 @@
 venv
 temp.py
-<<<<<<< HEAD
 res/env
 res/temp.py
 res/ipy.db
 res/test.db
-=======
-res
->>>>>>> 7ba5854 (Initial commit)
 __pycache__
 helper/__pycache__
 bots/__pycache__
