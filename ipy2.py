@@ -9,6 +9,7 @@ from helper.Admin import is_not_banned, on_message_chat_addon
 from helper.BanControl import ban_user, unban_user
 from helper.BotManager import BotManager
 from bots.text2image import draw_text
+from bots.coin import get_coin_info
 import sys
 
 iris_url = sys.argv[1]
@@ -65,6 +66,9 @@ def on_message(chat: ChatContext):
 
             case "!텍스트" | "!사진" | "!껄무새" | "!멈춰" | "!지워" | "!진행" | "!말대꾸" | "!텍스트추가":
                 draw_text(chat)
+            
+            case "!코인" | "!내코인" | "!바낸" | "!김프" | "!달러" | "!코인등록" | "!코인삭제":
+                get_coin_info(chat)
             
     except Exception as e :
         print(e)
