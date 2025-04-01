@@ -16,7 +16,11 @@ def is_reply():
     def decorator(func):
         def wrapper(*args,**kwargs):
             chat: ChatContext = args[0]
-            return func(*args, **kwargs) if chat.message.type == 26 else None
+            if chat.message.type == 26:
+                return func(*args, **kwargs)
+            else:
+                chat.reply("메세지에 답장하여 요청하세요.")
+                return None
         return wrapper
     return decorator
 
