@@ -159,7 +159,6 @@ def get_binance(chat: ChatContext):
             elif coin['symbol'] == query:
                 price = float(coin['lastPrice'])
                 change = float(coin['priceChangePercent'])
-                print(query + 'found with price ' + str(price))
             elif coin['symbol'] == query_split[1]+'USDT':
                 to_USDT = float(coin['lastPrice'])
         if not is_USDT:
@@ -170,7 +169,7 @@ def get_binance(chat: ChatContext):
         res = f'{query}\nUSD : ${price:,f}\nKRW : ￦{query_KRW:,.2f}\nKRW(김프) : ￦{query_KRW_kimp:,.2f}\n등락률 : {change:+.2f}%\n환율 : ￦{currency:,.0f}'
         chat.reply(res)
     except Exception as e:
-        print(e, flush=True)
+        print(e)
         chat.reply('코인이 정확하지 않거나 오류가 발생하였습니다. 코인심볼과 화폐단위를 함께 적어주세요. 예시 : BTC/USDT, ETC/USDT, IQ/BNB')
 
 def get_kimchi_premium(chat: ChatContext):

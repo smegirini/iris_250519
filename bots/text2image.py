@@ -185,9 +185,9 @@ def get_image_url_from_naver(query):
         'query' : query,
         'display':'20'
         }
+
     res = requests.get(url,params=params, headers=headers)
-    
-    js = json.loads(res.text)['items']
+    js = res.json()['items']
     link = []
     if not len(js) == 0:
         for item in js:
