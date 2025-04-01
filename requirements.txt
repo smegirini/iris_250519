@@ -1,1 +1,4 @@
-pillow gemini_webapi requests google-genai
+pillow
+gemini_webapi
+requests
+google-genai
