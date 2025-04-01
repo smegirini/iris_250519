@@ -3,12 +3,12 @@ from google.genai import types
 from PIL import Image
 from io import BytesIO
 from helper.ImageHelper import ImageHelper as ih
-from helper.Admin import has_param
+from helper.Admin import has_param, is_reply
 from irispy2 import Bot, ChatContext
 from helper.BotManager import BotManager
 import json
 from loguru import logger
-import os
+import os, io
 
 pro_key = os.getenv("GEMINI_KEY")
 
@@ -34,6 +34,17 @@ safety_settings=[
         threshold="BLOCK_NONE",  # Block none
     ),
 ]
+
+def get_gemini(chat: ChatContext):
+    match chat.message.command:
+        case "!gi":
+            get_gemini_image(chat)
+
+        case "!i2i":
+            get_gemini_image_to_image(chat)
+        
+        case "!분석":
+            get_gemini_vision_analyze_image_reply(chat)
 
 @has_param()
 def get_gemini_image(chat : ChatContext):
@@ -94,13 +105,10 @@ def get_gemini_image(chat : ChatContext):
             f"Q: {chat.message.msg[4:]}"
         )
 
+@is_reply()
 @has_param()
 def get_gemini_image_to_image(chat : ChatContext):
     try:
-        if chat.message.type != 26:
-            chat.reply("메세지에 답장하여 요청하세요")
-            return ""
-        
         msg = chat.message.msg[5:]
         attachment = json.loads(chat.message.attachment)
         bot = BotManager().get_current_bot()
@@ -160,14 +168,28 @@ def get_gemini_image_to_image(chat : ChatContext):
             f"Q: {chat.message.msg[4:]}"
         )
 
+@is_reply()
+def get_gemini_vision_analyze_image_reply(chat: ChatContext):
+    attachment = json.loads(chat.message.attachment)
+    bot = BotManager().get_current_bot()
+    src_record = bot.api.query("select * from chat_logs where id = ?",[attachment["src_logId"]])[0]
+    photo_url = ih.get_photo_url(src_record)
+    check_result = get_gemini_vision_analyze_image(photo_url)
+    chat.reply(check_result)
+
 def get_gemini_vision_analyze_image(url):
     client = genai.Client(api_key=pro_key)
+    image = Image.open(io.BytesIO(ih.download_img_from_url(url)))
     res = client.models.generate_content(
-        model="gemini-2.0-flash-lite",
+        model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
             system_instruction="analyze the given image, and rate violence, sexuality score out of 100 in below format. If sexuality score is over 50, 성인물 will be True. Do not add any other comments or markdown\n폭력성 : score/100\n선정성 : score/100\n성인물 : True/False",
-            ),
-        contents=[url]
+            tools=[types.Tool(
+                google_search=types.GoogleSearchRetrieval(
+                    dynamic_retrieval_config=types.DynamicRetrievalConfig(
+                        dynamic_threshold=0.6))
+            )],),
+        contents=[image]
         )
     try:
         result = res.text.strip()

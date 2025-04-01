@@ -1,6 +1,6 @@
 from irispy2 import Bot, ChatContext
 from irispy2.bot.models import ErrorContext
-from bots.gemini import get_gemini_image, get_gemini_image_to_image
+from bots.gemini import get_gemini
 from bots.pyeval import python_eval, real_eval
 from bots.stock import create_stock_image
 from bots.imagen import get_imagen
@@ -34,11 +34,8 @@ def on_message(chat: ChatContext):
             case "!iris":
                 chat.reply_media("IMAGE", [open("/home/dolidoli/help.png", "rb")])
 
-            case "!gi":
-                get_gemini_image(chat)
-            
-            case "!i2i":
-                get_gemini_image_to_image(chat)
+            case "!gi" | "!i2i" | "!분석":
+                get_gemini(chat)
             
             case "!ipy":
                 python_eval(chat)
