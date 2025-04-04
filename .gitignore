@@ -7,3 +7,6 @@ res/test.db
 __pycache__
 helper/__pycache__
 bots/__pycache__
+pyproject.toml
+uv.lock
+.python-version
