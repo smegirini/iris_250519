@@ -181,7 +181,7 @@ def get_gemini_vision_analyze_image(url):
     client = genai.Client(api_key=pro_key)
     image = Image.open(io.BytesIO(ih.download_img_from_url(url)))
     res = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.0-flash-exp-image-generation",
         config=types.GenerateContentConfig(
             system_instruction="analyze the given image, and rate violence, sexuality score out of 100 in below format. If sexuality score is over 50, 성인물 will be True. Do not add any other comments or markdown\n폭력성 : score/100\n선정성 : score/100\n성인물 : True/False",
             tools=[types.Tool(
