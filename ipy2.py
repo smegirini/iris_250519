@@ -73,7 +73,17 @@ def on_message(chat: ChatContext):
         BotManager().close_kv_connection()
         sys.stdout.flush()
             
-    
+"""
+#입장감지
+@bot.on_event("new_member")
+def on_newmem(chat: ChatContext):
+    chat.reply(f"Hello {chat.sender.name}")
+
+#퇴장감지
+@bot.on_event("del_member")
+def on_delmem(chat: ChatContext):
+    chat.reply(f"Bye {chat.sender.name}")
+"""
 
 @bot.on_event("error")
 def on_error(err: ErrorContext):
