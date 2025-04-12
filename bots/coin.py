@@ -189,7 +189,7 @@ def get_kimchi_premium(chat: ChatContext):
 def usd_to_krw(chat: ChatContext):
     usd = float(chat.message.msg[4:])
     USDKRW = get_USDKRW()
-    chat.reply(f'${usd:,.2f} = {USDKRW*float(chat.message.msg[4:]):,.2f}원\n환율 : {USDKRW:,.0f}원')
+    chat.reply(f'${usd:,.2f} = {USDKRW*float(chat.message.msg[4:]):,.2f}원\n환율 : {USDKRW:,.2f}원')
 
 def get_USDKRW():
     USDKRW = float(requests.get(currency_url).json()["country"][1]["value"].replace(",",""))
