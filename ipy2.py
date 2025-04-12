@@ -16,8 +16,8 @@ iris_url = sys.argv[1]
 bot = BotManager(iris_url).get_current_bot()
 
 @bot.on_event("message")
-@is_not_banned()
-@on_message_chat_addon()
+@is_not_banned
+@on_message_chat_addon
 def on_message(chat: ChatContext):
     try:
         match chat.message.command:

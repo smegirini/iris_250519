@@ -5,8 +5,8 @@ from irispy2 import ChatContext
 from helper.BotManager import BotManager
 from helper.Admin import is_admin, has_param
 
-@is_admin()
-@has_param()
+@is_admin
+@has_param
 def python_eval(chat: ChatContext):
     with open('temp.py', 'w') as tp:
         tp.write(chat.message.msg[5:])
@@ -22,8 +22,8 @@ def python_eval(chat: ChatContext):
     print(exec_out)
     chat.reply(exec_out)
 
-@is_admin()
-@has_param()
+@is_admin
+@has_param
 def real_eval(chat: ChatContext):
     try:
         exec(chat.message.msg[5:])

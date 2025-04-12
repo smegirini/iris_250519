@@ -46,7 +46,7 @@ def get_gemini(chat: ChatContext):
         case "!분석":
             get_gemini_vision_analyze_image_reply(chat)
 
-@has_param()
+@has_param
 def get_gemini_image(chat : ChatContext):
     try:
         msg = chat.message.msg[4:]
@@ -105,8 +105,8 @@ def get_gemini_image(chat : ChatContext):
             f"Q: {chat.message.msg[4:]}"
         )
 
-@is_reply()
-@has_param()
+@is_reply
+@has_param
 def get_gemini_image_to_image(chat : ChatContext):
     try:
         msg = chat.message.msg[5:]
@@ -168,7 +168,7 @@ def get_gemini_image_to_image(chat : ChatContext):
             f"Q: {chat.message.msg[4:]}"
         )
 
-@is_reply()
+@is_reply
 def get_gemini_vision_analyze_image_reply(chat: ChatContext):
     attachment = json.loads(chat.message.attachment)
     bot = BotManager().get_current_bot()

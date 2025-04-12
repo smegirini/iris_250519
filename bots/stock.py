@@ -4,7 +4,7 @@ import io
 import json
 from helper.Admin import has_param
 
-@has_param()
+@has_param
 def create_stock_image(chat):
     """
     Generates a PNG image with stock information based on the given query.
