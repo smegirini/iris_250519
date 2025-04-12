@@ -9,7 +9,7 @@ import os
 Secure_1PSID = os.getenv("SECURE_1PSID")
 Secure_1PSIDTS = os.getenv("SECURE_1PSIDTS")
 
-@has_param()
+@has_param
 def get_imagen(chat: ChatContext):
     image_files = asyncio.run(get_client(chat.message.msg[4:]))
     images = []

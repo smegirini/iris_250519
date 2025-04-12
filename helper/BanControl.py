@@ -3,8 +3,8 @@ from helper.DatabaseHelper import get_reply_user_id
 from irispy2 import ChatContext
 from helper.BotManager import BotManager
 
-@is_admin()
-@is_reply()
+@is_admin
+@is_reply
 def ban_user(chat: ChatContext):
     reply_user_id = get_reply_user_id(chat)
     kv = BotManager().get_kv()
@@ -17,8 +17,8 @@ def ban_user(chat: ChatContext):
         kv.put('ban',ban_list)
         chat.reply("유저를 밴 목록에 등록하였습니다.")
 
-@is_admin()
-@is_reply()
+@is_admin
+@is_reply
 def unban_user(chat: ChatContext):
     reply_user_id = get_reply_user_id(chat)
     kv = BotManager().get_kv()
