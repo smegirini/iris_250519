@@ -29,9 +29,9 @@ while True:
                         }
                     if message["room"] in detect_rooms:
                         requests.post(f"{base_url}/reply",headers=headers,json=message)
+        members_database = members
     except Exception as e:
         print("something went wrong")
         print(e)
-                
-    members_database = members
+    
     time.sleep(refresh_second)
