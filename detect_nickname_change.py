@@ -25,7 +25,7 @@ while True:
                     message = {
                         "type":"text",
                         "room":str(user["involved_chat_id"]),
-                        "data":f"{user['nickname']}님이 {new_user['nickname']}으로 닉네임을 변경했어요."
+                        "data":f"닉네임이 변경되었어요!\n{user['nickname']} -> {new_user['nickname']}"
                         }
                     if message["room"] in detect_rooms:
                         requests.post(f"{base_url}/reply",headers=headers,json=message)
