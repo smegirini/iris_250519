@@ -191,7 +191,7 @@ def get_image_url_from_naver(query):
     link = []
     if not len(js) == 0:
         for item in js:
-            if not "medium.com" in item['link'] and not "post.phinf.naver.net" in item['link']:
+            if not "medium.com" in item['link'] and not "post.phinf.naver.net" in item['link'] and not ".gif" in item['link']:
                 link.append(item['link'])
         if len(link) == 0:
             return js[random.randint(0,len(js))]['link']
