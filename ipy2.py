@@ -26,13 +26,14 @@ def on_message(chat: ChatContext):
                 chat.reply(f"Hello {chat.sender.name}")
 
             case "!tt":
-                chat.reply_media("IMAGE", [open("/home/dolidoli/aaa.jpeg", "rb")])
+                chat.reply_media("IMAGE", [open("res/aaa.jpeg", "rb")])
 
             case "!ttt":
-                chat.reply_media("IMAGE", [open("/home/dolidoli/aaa.jpeg", "rb"), open("/home/dolidoli/aaa.jpeg", "rb"), open("/home/dolidoli/aaa.jpeg", "rb")])
+                chat.reply_media("IMAGE", [open("res/aaa.jpeg", "rb"), open("res/aaa.jpeg", "rb"), open("res/aaa.jpeg", "rb")])
             
+            #make your own help.png or remove !iris
             case "!iris":
-                chat.reply_media("IMAGE", [open("/home/dolidoli/help.png", "rb")])
+                chat.reply_media("IMAGE", [open("res/help.png", "rb")])
 
             case "!gi" | "!i2i" | "!분석":
                 get_gemini(chat)
