@@ -183,7 +183,7 @@ def get_gemini_vision_analyze_image(url):
     res = client.models.generate_content(
         model="gemini-2.0-flash-exp-image-generation",
         config=types.GenerateContentConfig(
-            system_instruction="analyze the given image, and rate violence, sexuality score out of 100 in below format. If the image given is text-only image, scores must be N/A. If sexuality score is over 50, 성인물 will be True. If sexuality is over 30, add short comment in Korean why you assessed that score. Do not add any other comments or markdown\n폭력성 : score/100\n선정성 : score/100\n성인물 : True/False",
+            system_instruction="analyze the given image, and rate violence, sexuality score out of 100 in below format. If the image given is text-only image, scores must be N/A. If sexuality score is over 50, 성인물 will be True. Do not add any other comments or markdown\n폭력성 : score/100\n선정성 : score/100\n성인물 : True/False",
             tools=[types.Tool(
                 google_search=types.GoogleSearchRetrieval(
                     dynamic_retrieval_config=types.DynamicRetrievalConfig(
