@@ -10,6 +10,7 @@ from irispy2 import ChatContext
 
 
 RES_PATH = "res/"
+disallowed_substrings = ["medium.com", "post.phinf.naver.net", ".gif", "imagedelivery.net", "clien.net"]
 
 def draw_text(chat):
     match chat.message.command:
@@ -33,38 +34,52 @@ def draw_text(chat):
             add_text(chat)
 
 def draw_default(chat):
-    msg = " ".join(chat.message.msg.split(" ")[1:])  
-    msg_split = msg.split("##")
+    try:
+        msg = " ".join(chat.message.msg.split(" ")[1:])  
+        msg_split = msg.split("##")
+        url = None
 
-    match len(msg_split):
-        case 1:
-            txt = msg
-            check = ""
-            img = Image.open(RES_PATH + 'default.jpg')
+        match len(msg_split):
+            case 1:
+                txt = msg
+                check = ""
+                img = Image.open(RES_PATH + 'default.jpg')
 
-        case 2:
-            img = get_image_from_url(msg_split[0])
-            txt = msg_split[1]
-            check = get_gemini_vision_analyze_image(msg_plit[0])
+            case 2:
+                img = get_image_from_url(msg_split[0])
+                txt = msg_split[1]
+                check = get_gemini_vision_analyze_image(msg_plit[0])
 
-        case 3:
-            url = get_image_url_from_naver(msg_split[1])
-            if url == False:
-                chat.reply("사진 검색에 실패했습니다.")
-                return None
+            case 3:
+                url = get_image_url_from_naver(msg_split[1])
+                print(f"received photo url: {url}")
+                if url == False:
+                    chat.reply("사진 검색에 실패했습니다.")
+                    return None
+                
+                img = get_image_from_url(url)
+                txt = msg_split[2]
+                check = get_gemini_vision_analyze_image(url)
+                print(f"check result: {"True" if "True" in check else "False"}")
             
-            img = get_image_from_url(url)
-            txt = msg_split[2]
-            check = get_gemini_vision_analyze_image(url)
+            case _:
+                return None
         
-        case _:
+        if "True" in check:
+            chat.reply("과도한 노출로 차단합니다.")
             return None
-    
-    if "True" in check:
-        chat.reply("과도한 노출로 차단합니다.")
-        return None
-    
-    add_default_text(chat, img, txt)
+        
+        add_default_text(chat, img, txt)
+    except Exception as e:
+        print(e)
+        if url:
+            print("Exception occurred with url: {url}")
+            kv = BotManager().get_kv()
+            failed_urls = kv.get("naver_failed_urls")
+            if not failed_urls:
+                failed_urls = []
+            failed_urls.append(url)
+            kv.put("naver_failed_urls",failed_urls)
 
 def draw_parrot(chat):
     txt = " ".join(chat.message.msg.split(" ")[1:])
@@ -191,10 +206,10 @@ def get_image_url_from_naver(query):
     link = []
     if not len(js) == 0:
         for item in js:
-            if not "medium.com" in item['link'] and not "post.phinf.naver.net" in item['link'] and not ".gif" in item['link']:
+            if not any(disallowed_substring in item['link'] for disallowed_substring in disallowed_substrings):
                 link.append(item['link'])
         if len(link) == 0:
-            return js[random.randint(0,len(js))]['link']
+            return False
         else:
             return link[random.randint(0,len(link)-1)]
     else:
