@@ -6,7 +6,7 @@ from loguru import logger
 import json
 
 class ImageHelper:
-    image_directory = "/home/dolidoli/res/temppic/"
+    image_directory = "res/temppic/"
     
     @classmethod
     def get_photo_url(cls, record) -> str:
