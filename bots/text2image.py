@@ -158,11 +158,11 @@ def add_default_text(chat, img, txt):
     draw = ImageDraw.Draw(img)
     w, h = multiline_textsize(txt,font=font)
     
-    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-20-1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-20-1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-20+1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-20+1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2, img.size[1]-h-20), u'%s' % txt, font=font, align='center', fill=color)
+    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/10)-1), u'%s' % txt, font=font, align='center', fill="black")
+    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/10)-1), u'%s' % txt, font=font, align='center', fill="black")
+    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/10)+1), u'%s' % txt, font=font, align='center', fill="black")
+    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/10)+1), u'%s' % txt, font=font, align='center', fill="black")
+    draw.multiline_text((img.size[0]/2-w/2, img.size[1]-h-(img.size[1]/10)), u'%s' % txt, font=font, align='center', fill=color)
     
     send_image(chat, img)
     
