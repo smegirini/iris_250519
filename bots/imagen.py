@@ -1,9 +1,8 @@
-from irispy2 import Bot, ChatContext
+from irispy2 import ChatContext
 import asyncio
 from gemini_webapi import GeminiClient
 import time
-import json
-from helper.Admin import has_param
+from helper.Addon import has_param
 import os
 
 Secure_1PSID = os.getenv("SECURE_1PSID")

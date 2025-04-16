@@ -5,7 +5,8 @@ from bots.pyeval import python_eval, real_eval
 from bots.stock import create_stock_image
 from bots.imagen import get_imagen
 from bots.lyrics import get_lyrics, find_lyrics
-from helper.Admin import is_not_banned, on_message_chat_addon
+from helper.Admin import is_not_banned
+from helper.Addon import on_message_chat_addon
 from helper.BanControl import ban_user, unban_user
 from helper.BotManager import BotManager
 from bots.text2image import draw_text

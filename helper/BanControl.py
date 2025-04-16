@@ -1,4 +1,5 @@
-from helper.Admin import is_admin, is_reply
+from helper.Admin import is_admin
+from helper.Addon import is_reply
 from helper.DatabaseHelper import get_reply_user_id
 from irispy2 import ChatContext
 from helper.BotManager import BotManager

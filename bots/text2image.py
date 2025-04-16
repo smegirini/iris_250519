@@ -5,7 +5,7 @@ from io import BytesIO, BufferedReader
 from bots.gemini import get_gemini_vision_analyze_image
 from helper.ImageHelper import ImageHelper as ih
 from helper.BotManager import BotManager
-from helper.Admin import is_reply
+from helper.Addon import is_reply
 from irispy2 import ChatContext
 
 
