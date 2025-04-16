@@ -3,7 +3,8 @@ import sys
 import subprocess
 from irispy2 import ChatContext
 from helper.BotManager import BotManager
-from helper.Admin import is_admin, has_param
+from helper.Admin import is_admin
+from helper.Addon import has_param
 
 @is_admin
 @has_param
@@ -11,7 +12,7 @@ def python_eval(chat: ChatContext):
     with open('temp.py', 'w') as tp:
         tp.write(chat.message.msg[5:])
     try:
-        exec_out = subprocess.check_output(["venv/bin/python", "temp.py"],stderr=subprocess.PIPE,timeout=30).decode("utf-8")
+        exec_out = subprocess.check_output([".venv/bin/python", "temp.py"],stderr=subprocess.PIPE,timeout=30).decode("utf-8")
         if exec_out[-1:] == "\n":
                 exec_out = exec_out[:-1]
     except subprocess.TimeoutExpired:
