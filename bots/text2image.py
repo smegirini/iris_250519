@@ -18,7 +18,7 @@ def draw_text(chat):
             draw_default(chat)
         case "!사진":
             txt = chat.message.param
-            chat.message.msg = f"!텍스트 검색##{txt}##  "
+            chat.message.param = f"검색##{txt}##  "
             draw_default(chat)
         case "!껄무새":
             draw_parrot(chat)
@@ -156,11 +156,11 @@ def add_default_text(chat, img, txt):
     draw = ImageDraw.Draw(img)
     w, h = multiline_textsize(txt,font=font)
     
-    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/10)-1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/10)-1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/10)+1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/10)+1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2, img.size[1]-h-(img.size[1]/10)), u'%s' % txt, font=font, align='center', fill=color)
+    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/20)-1), u'%s' % txt, font=font, align='center', fill="black")
+    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/20)-1), u'%s' % txt, font=font, align='center', fill="black")
+    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/20)+1), u'%s' % txt, font=font, align='center', fill="black")
+    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/20)+1), u'%s' % txt, font=font, align='center', fill="black")
+    draw.multiline_text((img.size[0]/2-w/2, img.size[1]-h-(img.size[1]/20)), u'%s' % txt, font=font, align='center', fill=color)
     
     send_image(chat, img)
     
