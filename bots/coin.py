@@ -10,10 +10,9 @@ currency_url = "https://m.search.naver.com/p/csearch/content/qapirender.nhn?key=
 binance_url = "https://api.binance.com/api/v3/ticker/"
 
 def get_coin_info(chat: ChatContext):
-    message_split = chat.message.msg.split(" ")
-    match message_split[0]:
+    match chat.message.command:
         case "!코인":
-            if len(message_split) > 1:
+            if chat.message.has_param:
                 get_upbit(chat)
             else:
                 get_upbit_all(chat)
@@ -32,7 +31,7 @@ def get_coin_info(chat: ChatContext):
 
 def get_upbit(chat: ChatContext):
     kv = BotManager().get_kv()
-    query = chat.message.msg[4:].upper()
+    query = chat.message.param.upper()
     res = requests.get(base_url + 'KRW-' + query)
     if 'error' in res.text:
         try:
@@ -144,7 +143,7 @@ def get_upbit_korean(query):
 
 def get_binance(chat: ChatContext):
     try:
-        query = chat.message.msg[4:].upper()
+        query = chat.message.param.upper()
         query_split = query.split("/")
         query = "".join(query_split)
         currency = get_USDKRW()
@@ -187,7 +186,7 @@ def get_kimchi_premium(chat: ChatContext):
     chat.reply(f'김치 프리미엄\n업빗 : ￦{BTCKRW:,.0f}(${BTCKRW_to_USDT:,.0f})\n바낸 : ￦{BTCUSDT_to_KRW:,.0f}(${BTCUSDT:,.0f})\n김프 : {kimchi_premium:.2f}%\n환율 : ￦{USDKRW:,.0f}\n버거시간(동부) : {EST}')
 
 def usd_to_krw(chat: ChatContext):
-    usd = float(chat.message.msg[4:])
+    usd = float(chat.message.param)
     USDKRW = get_USDKRW()
     chat.reply(f'${usd:,.2f} = {USDKRW*float(chat.message.msg[4:]):,.2f}원\n환율 : {USDKRW:,.2f}원')
 

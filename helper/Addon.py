@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 import typing as t
 from types import MethodType
 from helper.ImageHelper import ImageHelper as ih
-from helper.DatabaseHelper import get_reply_chat, get_name_of_user_id
+from helper.DatabaseHelper import *
 import json
 from irispy2.bot.models import Message, Room, User
 
@@ -64,6 +64,8 @@ def add_chat_addon(chat):
     chat.sender.avatar = Avatar(chat.sender.id, chat._ChatContext__api)
     chat.api = chat._ChatContext__api
     chat.get_source = MethodType(get_source, chat)
+    chat.get_previous_chat = MethodType(get_previous_chat, chat)
+    chat.get_next_chat = MethodType(get_next_chat, chat)
     return chat
 
 def has_param(func):
@@ -85,29 +87,47 @@ def is_reply(func):
 def get_source(self):
     source_record = get_reply_chat(self.message)
     if source_record:
-        v = {}
-        try:
-            v = json.loads(source_record["v"])
-        except Exception:
-            pass
-
-        room = Room(id=int(source_record["chat_id"]), name=self.room)
-        sender = User(id=int(source_record["user_id"]), name=get_name_of_user_id(int(source_record["user_id"])))
-        message = Message(
-            id=int(source_record["id"]),
-            type=int(source_record["type"]),
-            msg=source_record["message"],
-            attachment=source_record["attachment"],
-            v=v,
-        )
-
-        source_chat = ChatContext(
-            room=room, sender=sender, message=message, raw=source_record, api=self.api
-        )
-        
-        source_chat = add_chat_addon(source_chat)
+        source_chat = make_chat(self, source_record)
         return source_chat
     else:
         return None
 
+def get_next_chat(self, n):
+    next_record = get_next_record(self.message.id, n)
+    if next_record:
+        next_chat = make_chat(self, next_record)
+        return next_chat
+    else:
+        return None
 
+def get_previous_chat(self, n):
+    previous_record = get_previous_record(self.message.id, n)
+    if previous_record:
+        previous_chat = make_chat(self, previous_record)
+        return previous_chat
+    else:
+        return None
+
+def make_chat(chat, record):
+    v = {}
+    try:
+        v = json.loads(record["v"])
+    except Exception:
+        pass
+
+    room = Room(id=int(record["chat_id"]), name=chat.room)
+    sender = User(id=int(record["user_id"]), name=get_name_of_user_id(int(record["user_id"])))
+    message = Message(
+        id=int(record["id"]),
+        type=int(record["type"]),
+        msg=record["message"],
+        attachment=record["attachment"],
+        v=v,
+    )
+
+    new_chat = ChatContext(
+        room=room, sender=sender, message=message, raw=record, api=chat.api
+    )
+    
+    new_chat = add_chat_addon(new_chat)
+    return new_chat

@@ -49,7 +49,7 @@ def get_gemini(chat: ChatContext):
 @has_param
 def get_gemini_image(chat : ChatContext):
     try:
-        msg = chat.message.msg[4:]
+        msg = chat.message.param
         client = genai.Client(
             api_key=pro_key,
         )
@@ -109,10 +109,8 @@ def get_gemini_image(chat : ChatContext):
 @has_param
 def get_gemini_image_to_image(chat : ChatContext):
     try:
-        msg = chat.message.msg[5:]
-        attachment = json.loads(chat.message.attachment)
-        bot = BotManager().get_current_bot()
-        src_record = bot.api.query("select * from chat_logs where id = ?",[attachment["src_logId"]])[0]
+        msg = chat.message.param
+        src_record = chat.get_source().raw
         photo_url = ih.get_photo_url(src_record)
         img = ih.download_img_from_url(photo_url)
         filepath = ih.save_img(img)
@@ -160,19 +158,17 @@ def get_gemini_image_to_image(chat : ChatContext):
         else:
             chat.reply(
                 f"오류가 발생하였거나, Gemini가 이미지 생성을 거부하였습니다.\n"
-                f"Q: {chat.message.msg[4:]}"
+                f"Q: {chat.message.param}"
             )
-    except:
+    except Exception as e:
         chat.reply(
             f"오류가 발생하였거나, Gemini가 이미지 생성을 거부하였습니다.\n"
-            f"Q: {chat.message.msg[4:]}"
+            f"Q: {chat.message.param}"
         )
 
 @is_reply
 def get_gemini_vision_analyze_image_reply(chat: ChatContext):
-    attachment = json.loads(chat.message.attachment)
-    bot = BotManager().get_current_bot()
-    src_record = bot.api.query("select * from chat_logs where id = ?",[attachment["src_logId"]])[0]
+    src_record = chat.get_source().raw
     photo_url = ih.get_photo_url(src_record)
     check_result = get_gemini_vision_analyze_image(photo_url)
     chat.reply(check_result)

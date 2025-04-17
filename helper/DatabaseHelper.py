@@ -26,3 +26,62 @@ def get_name_of_user_id(user_id: int):
     if len(result) == 0:
         return None
     return result[0]['name']
+
+def get_previous_record(log_id, n: int = 1):
+    bot = BotManager().get_current_bot()
+    if n < 0:
+        raise ValueError("n must be greater than 0")
+    
+    query = """
+        WITH RECURSIVE ChatHistory AS (
+            SELECT *
+            FROM chat_logs
+            WHERE id = ?
+            UNION ALL
+            SELECT c.*
+            FROM chat_logs c
+            JOIN ChatHistory h ON c.id = h.prev_id
+        )
+        SELECT *
+        FROM ChatHistory
+        LIMIT 1 OFFSET ?;
+        """
+    record = bot.api.query(query, [log_id, n])
+    return record[0] if record else None
+
+def get_next_record(log_id, n: int = 1):
+    n = n - 1
+    if n < -1:
+        raise ValueError("n must be greater than 0")
+    bot = BotManager().get_current_bot()
+    query = """
+        WITH RECURSIVE ChatHistory AS (
+            SELECT
+                *,
+                0 AS depth
+            FROM
+                chat_logs
+            WHERE
+                id = ?
+
+            UNION ALL
+
+            SELECT
+                c.*,
+                h.depth + 1
+            FROM
+                chat_logs c
+            JOIN ChatHistory h ON c.prev_id = h.id
+            WHERE
+                h.depth < 100
+                AND c.prev_id IS NOT NULL  -- Ensure prev_id is not NULL
+                AND h.id IS NOT NULL       -- Ensure h.id is not NULL
+                AND c.id IS NOT NULL       -- Ensure c.id is not NULL
+        )
+        SELECT *
+        FROM ChatHistory
+        WHERE depth = ? + 1
+        LIMIT 1; 
+        """
+    record = bot.api.query(query, [log_id, n])
+    return record[0] if record else None

@@ -17,7 +17,7 @@ def draw_text(chat):
         case "!텍스트":
             draw_default(chat)
         case "!사진":
-            txt = " ".join(chat.message.msg.split(" ")[1:])
+            txt = chat.message.param
             chat.message.msg = f"!텍스트 검색##{txt}##  "
             draw_default(chat)
         case "!껄무새":
@@ -35,7 +35,7 @@ def draw_text(chat):
 
 def draw_default(chat):
     try:
-        msg = " ".join(chat.message.msg.split(" ")[1:])  
+        msg = chat.message.param
         msg_split = msg.split("##")
         url = None
 
@@ -48,7 +48,7 @@ def draw_default(chat):
             case 2:
                 img = get_image_from_url(msg_split[0])
                 txt = msg_split[1]
-                check = get_gemini_vision_analyze_image(msg_plit[0])
+                check = get_gemini_vision_analyze_image(msg_split[0])
 
             case 3:
                 url = get_image_url_from_naver(msg_split[1])
@@ -82,18 +82,18 @@ def draw_default(chat):
             kv.put("naver_failed_urls",failed_urls)
 
 def draw_parrot(chat):
-    txt = " ".join(chat.message.msg.split(" ")[1:])
+    txt = chat.message.param
     img = Image.open(RES_PATH + 'parrot.jpg')
     add_default_text(chat, img, txt)
 
 def draw_stop(chat):
-    txt = " ".join(chat.message.msg.split(" ")[1:])
+    txt = chat.message.param
     img = Image.open(RES_PATH + 'stop.jpg')
     add_default_text(chat, img, txt)
 
 def draw_gogo(chat):
     color = '#FFFFFF'
-    txt = " ".join(chat.message.msg.split(" ")[1:])
+    txt = chat.message.param
     img = Image.open(RES_PATH + 'gogo.png')
     fontsize = 30
     draw = ImageDraw.Draw(img)
@@ -105,7 +105,7 @@ def draw_gogo(chat):
 
 def draw_rmrf(chat):
     color = '#000000'
-    txt = " ".join(chat.message.msg.split(" ")[1:])
+    txt = chat.message.param
     img = Image.open(RES_PATH + 'rmrf.jpg')
     fontsize = 40
     draw = ImageDraw.Draw(img)
@@ -117,7 +117,7 @@ def draw_rmrf(chat):
 
 def draw_sungmo(chat):
     color = '#000000'
-    txt_split = " ".join(chat.message.msg.split(" ")[1:]).split("##")
+    txt_split = chat.message.param.split("##")
     txt1 = txt_split[0]
     txt2 = txt_split[1]
     img = Image.open(RES_PATH + 'sungmo.jpeg')
@@ -134,9 +134,7 @@ def draw_sungmo(chat):
 
 @is_reply
 def add_text(chat):
-    attachment = json.loads(chat.message.attachment)
-    bot = BotManager().get_current_bot()
-    src_record = bot.api.query("select * from chat_logs where id = ?",[attachment["src_logId"]])[0]
+    src_record = chat.get_source().raw
     photo_url = ih.get_photo_url(src_record)
 
     img = get_image_from_url(photo_url)

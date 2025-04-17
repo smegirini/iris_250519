@@ -7,7 +7,7 @@ from helper.BotManager import BotManager
 @is_admin
 @is_reply
 def ban_user(chat: ChatContext):
-    reply_user_id = get_reply_user_id(chat)
+    reply_user_id = chat.get_source().sender.id
     kv = BotManager().get_kv()
     ban_list = kv.get('ban')
     if reply_user_id in ban_list:
@@ -21,7 +21,7 @@ def ban_user(chat: ChatContext):
 @is_admin
 @is_reply
 def unban_user(chat: ChatContext):
-    reply_user_id = get_reply_user_id(chat)
+    reply_user_id = chat.get_source().sender.id
     kv = BotManager().get_kv()
     ban_list: list = kv.get('ban')
     if reply_user_id in ban_list:
