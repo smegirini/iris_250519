@@ -5,6 +5,7 @@ from bots.pyeval import python_eval, real_eval
 from bots.stock import create_stock_image
 from bots.imagen import get_imagen
 from bots.lyrics import get_lyrics, find_lyrics
+from bots.replyphoto import reply_photo
 from helper.Admin import is_not_banned
 from helper.Addon import on_message_chat_addon
 from helper.BanControl import ban_user, unban_user
@@ -26,12 +27,9 @@ def on_message(chat: ChatContext):
             case "!hhi":
                 chat.reply(f"Hello {chat.sender.name}")
 
-            case "!tt":
-                chat.reply_media("IMAGE", [open("res/aaa.jpeg", "rb")])
+            case "!tt" | "!ttt" | "!프사":
+                reply_photo(chat)
 
-            case "!ttt":
-                chat.reply_media("IMAGE", [open("res/aaa.jpeg", "rb"), open("res/aaa.jpeg", "rb"), open("res/aaa.jpeg", "rb")])
-            
             #make your own help.png or remove !iris
             case "!iris":
                 chat.reply_media("IMAGE", [open("res/help.png", "rb")])
