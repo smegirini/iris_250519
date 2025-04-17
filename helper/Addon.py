@@ -92,7 +92,7 @@ def get_source(self):
     else:
         return None
 
-def get_next_chat(self, n):
+def get_next_chat(self, n: int = 1):
     next_record = get_next_record(self.message.id, n)
     if next_record:
         next_chat = make_chat(self, next_record)
@@ -100,7 +100,7 @@ def get_next_chat(self, n):
     else:
         return None
 
-def get_previous_chat(self, n):
+def get_previous_chat(self, n: int = 1):
     previous_record = get_previous_record(self.message.id, n)
     if previous_record:
         previous_chat = make_chat(self, previous_record)
