@@ -10,7 +10,7 @@ Secure_1PSIDTS = os.getenv("SECURE_1PSIDTS")
 
 @has_param
 def get_imagen(chat: ChatContext):
-    image_files = asyncio.run(get_client(chat.message.msg[4:]))
+    image_files = asyncio.run(get_client(chat.message.param))
     images = []
     for file in image_files:
         images.append(open("res/temppic/"+file,"rb"))
