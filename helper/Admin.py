@@ -13,11 +13,20 @@ def is_not_banned(func):
         if admin_check(chat):
             return func(*args, **kwargs)
         kv = BotManager().get_kv()
-        res = chat.sender.id in kv.get('ban')
+        bans = kv.get('ban')
+        if not bans:
+            kv.put('ban',[])
+            bans = []
+        res = chat.sender.id in bans
         return "" if res else func(*args, **kwargs)
     return wrapper
 
 def admin_check(chat:ChatContext):
     kv = BotManager().get_kv()
-    res = chat.sender.id in kv.get('admin')
+    admins = kv.get('admin')
+    if not admins:
+        kv.put('admin', [])
+        admins = []
+    res = chat.sender.id in admins
+    
     return res
