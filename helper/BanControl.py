@@ -7,7 +7,9 @@ from helper.BotManager import BotManager
 @is_admin
 @is_reply
 def ban_user(chat: ChatContext):
-    reply_user_id = chat.get_source().sender.id
+    replied_chat = chat.get_source()
+    reply_user_id = replied_chat.sender.id
+    reply_user_name = replied_chat.sender.name
     kv = BotManager().get_kv()
     ban_list = kv.get('ban')
     if not ban_list:
@@ -18,12 +20,14 @@ def ban_user(chat: ChatContext):
         ban_list.append(reply_user_id)
         print(ban_list)
         kv.put('ban',ban_list)
-        chat.reply("유저를 밴 목록에 등록하였습니다.")
+        chat.reply(f"[{reply_user_name}]님을 밴 목록에 등록하였습니다.")
 
 @is_admin
 @is_reply
 def unban_user(chat: ChatContext):
-    reply_user_id = chat.get_source().sender.id
+    replied_chat = chat.get_source()
+    reply_user_id = replied_chat.sender.id
+    reply_user_name = replied_chat.sender.name
     kv = BotManager().get_kv()
     ban_list = kv.get('ban')
     if not ban_list:
@@ -31,7 +35,7 @@ def unban_user(chat: ChatContext):
     if reply_user_id in ban_list:
         ban_list.remove(reply_user_id)
         kv.put('ban',ban_list)
-        chat.reply("밴 목록에서 삭제하였습니다.")
+        chat.reply(f"[{reply_user_name}]님을 밴 목록에서 삭제하였습니다.")
         print(kv.get('ban'))
     else:
         chat.reply("밴 목록에 없는 유저입니다.")
