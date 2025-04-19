@@ -2,9 +2,7 @@
 import sys
 import subprocess
 from irispy2 import ChatContext
-from helper.BotManager import BotManager
-from helper.Admin import is_admin
-from helper.Addon import has_param
+from Addon import *
 
 @is_admin
 @has_param

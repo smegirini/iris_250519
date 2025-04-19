@@ -3,7 +3,6 @@ import time
 from PIL import Image
 from io import BytesIO, BufferedReader
 from loguru import logger
-import json
 
 class ImageHelper:
     image_directory = "res/temppic/"

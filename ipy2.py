@@ -1,4 +1,4 @@
-from irispy2 import Bot, ChatContext
+from irispy2 import ChatContext
 from irispy2.bot.models import ErrorContext
 from bots.gemini import get_gemini
 from bots.pyeval import python_eval, real_eval
@@ -6,8 +6,7 @@ from bots.stock import create_stock_image
 from bots.imagen import get_imagen
 from bots.lyrics import get_lyrics, find_lyrics
 from bots.replyphoto import reply_photo
-from helper.Admin import is_not_banned
-from helper.Addon import on_message_chat_addon
+from Addon import *
 from helper.BanControl import ban_user, unban_user
 from helper.BotManager import BotManager
 from bots.text2image import draw_text
