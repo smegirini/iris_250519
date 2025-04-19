@@ -10,6 +10,8 @@ def ban_user(chat: ChatContext):
     reply_user_id = chat.get_source().sender.id
     kv = BotManager().get_kv()
     ban_list = kv.get('ban')
+    if not ban_list:
+        ban_list = []
     if reply_user_id in ban_list:
         chat.reply("이미 밴 등록된 유저입니다.")
     else:
@@ -23,7 +25,9 @@ def ban_user(chat: ChatContext):
 def unban_user(chat: ChatContext):
     reply_user_id = chat.get_source().sender.id
     kv = BotManager().get_kv()
-    ban_list: list = kv.get('ban')
+    ban_list = kv.get('ban')
+    if not ban_list:
+        ban_list = []
     if reply_user_id in ban_list:
         ban_list.remove(reply_user_id)
         kv.put('ban',ban_list)
