@@ -11,7 +11,7 @@ def get_reply_user_id(message: Message):
 def get_reply_chat(message: Message):
     try:
         bot = BotManager().get_current_bot()
-        src_log_id = json.loads(message.attachment)['src_logId']
+        src_log_id = message.attachment['src_logId']
         query = "select * from chat_logs where id = ?"    
         src_record = bot.api.query(query,[src_log_id])
         return src_record[0]

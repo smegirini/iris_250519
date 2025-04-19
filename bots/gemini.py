@@ -110,8 +110,8 @@ def get_gemini_image(chat : ChatContext):
 def get_gemini_image_to_image(chat : ChatContext):
     try:
         msg = chat.message.param
-        src_record = chat.get_source().raw
-        photo_url = ih.get_photo_url(src_record)
+        src_chat = chat.get_source()
+        photo_url = ih.get_photo_url(src_chat)
         img = ih.download_img_from_url(photo_url)
         filepath = ih.save_img(img)
 
@@ -168,8 +168,8 @@ def get_gemini_image_to_image(chat : ChatContext):
 
 @is_reply
 def get_gemini_vision_analyze_image_reply(chat: ChatContext):
-    src_record = chat.get_source().raw
-    photo_url = ih.get_photo_url(src_record)
+    src_chat = chat.get_source()
+    photo_url = ih.get_photo_url(src_chat)
     check_result = get_gemini_vision_analyze_image(photo_url)
     chat.reply(check_result)
 

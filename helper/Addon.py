@@ -89,6 +89,7 @@ def add_chat_addon(chat):
     chat.message.command, *param = chat.message.msg.split(" ", 1)
     chat.message.has_param = len(param) > 0
     chat.message.param = param[0] if chat.message.has_param else None
+    chat.message.attachment = load_attachment(chat)
     chat.sender.avatar = Avatar(chat.sender.id, chat._ChatContext__api)
     chat.api = chat._ChatContext__api
     chat.get_source = MethodType(get_source, chat)
@@ -136,6 +137,13 @@ def get_previous_chat(self, n: int = 1):
         return previous_chat
     else:
         return None
+
+def load_attachment(self):
+    try:
+        attachment = json.loads(self.message.attachment)
+        return attachment
+    except Exception as e:
+        return self.message.attachment
 
 def make_chat(chat, record):
     v = {}
