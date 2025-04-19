@@ -1,18 +1,18 @@
 # coding: utf8
 from PIL import Image, ImageFont, ImageDraw
-import requests, json, random, os
+import requests, random, os
 from io import BytesIO, BufferedReader
 from bots.gemini import get_gemini_vision_analyze_image
 from helper.ImageHelper import ImageHelper as ih
 from helper.BotManager import BotManager
-from helper.Addon import is_reply
+from Addon import *
 from irispy2 import ChatContext
 
 
 RES_PATH = "res/"
 disallowed_substrings = ["medium.com", "post.phinf.naver.net", ".gif", "imagedelivery.net", "clien.net"]
 
-def draw_text(chat):
+def draw_text(chat: ChatContext):
     match chat.message.command:
         case "!텍스트":
             draw_default(chat)

@@ -3,11 +3,8 @@ from google.genai import types
 from PIL import Image
 from io import BytesIO
 from helper.ImageHelper import ImageHelper as ih
-from helper.Addon import has_param, is_reply
+from Addon import *
 from irispy2 import ChatContext
-from helper.BotManager import BotManager
-import json
-from loguru import logger
 import os, io
 
 pro_key = os.getenv("GEMINI_KEY")
