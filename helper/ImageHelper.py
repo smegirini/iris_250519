@@ -9,15 +9,14 @@ class ImageHelper:
     image_directory = "res/temppic/"
     
     @classmethod
-    def get_photo_url(cls, record) -> str:
-        attachment = json.loads(record["attachment"])
+    def get_photo_url(cls, chat) -> str:        
         try:
-            if record["type"] == 71:
-                url = attachment["C"]["THL"][0]["TH"]["THU"]
-            elif record["type"] == 27:
-                url = attachment["imageUrls"][0]
+            if chat.message.type == 71:
+                url = chat.message.attachment["C"]["THL"][0]["TH"]["THU"]
+            elif chat.message.type == 27:
+                url = chat.message.attachment["imageUrls"][0]
             else:
-                url = attachment["url"]
+                url = chat.message.attachment["url"]
             return url
         except Exception as e:
             print(e)

@@ -134,8 +134,8 @@ def draw_sungmo(chat):
 
 @is_reply
 def add_text(chat):
-    src_record = chat.get_source().raw
-    photo_url = ih.get_photo_url(src_record)
+    src_chat = chat.get_source()
+    photo_url = ih.get_photo_url(src_chat)
 
     img = get_image_from_url(photo_url)
     txt = " ".join(chat.message.msg.split(" ")[1:])
