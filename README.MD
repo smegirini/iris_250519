@@ -13,10 +13,10 @@
     cd ~
     git clone https://github.com/dolidolih/iris_bot
     cd iris_bot
-    python -m venv venv
+    python -m venv .venv
     
     # 가상 환경 활성화 (Windows의 경우 venv/Scripts/Activate.ps1)
-    source venv/bin/activate
+    source .venv/bin/activate
     
     pip install -U pip
     pip install -r requirements.txt
@@ -32,6 +32,7 @@
     from helper.BotManager import BotManager
     kv = BotManager("a").get_kv()
     kv.put("admin", [YOUR_ADMIN_USER_ID])
+    kv.put("ban", [])
     exit()
     ```
 
