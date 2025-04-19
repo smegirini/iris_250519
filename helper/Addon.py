@@ -12,7 +12,7 @@ from irispy2.bot.models import Message, Room, User
 @dataclass(repr=False)
 class Avatar:
     _id: int = field(init=False)
-    _api: IrisAPI = field(init=False, repr=False) # Keep API internal
+    _api: IrisAPI = field(init=False, repr=False)
 
     def __init__(self, id: int, api: IrisAPI):
         self._id = id
@@ -50,6 +50,34 @@ class Avatar:
     def __repr__(self) -> str:
         return f"Avatar(id={self._id})"
 
+@dataclass(repr=False)
+class PatchedRoom:
+    _api: IrisAPI = field(init=False, repr=False)
+
+    def __init__(self, id: int, name: str, api: IrisAPI):
+        self.id = id
+        self.name = name
+        self._api = api
+
+    @cached_property
+    def type(self) -> t.Optional[str]:
+        try:
+            results = self._api.query(
+                'select type from chat_rooms where id = ?',
+                [self.id]
+            )
+            if results and results[0]:
+                fetched_type = results[0].get("type")
+                return fetched_type
+            else:
+                return None
+
+        except Exception as e:
+            return None
+
+    def __repr__(self) -> str:
+        return f"Room(id={self._id}, name={self._name})"
+
 def on_message_chat_addon(func):
     def wrapper(*args,**kwargs):
         chat: ChatContext = args[0]
@@ -66,6 +94,7 @@ def add_chat_addon(chat):
     chat.get_source = MethodType(get_source, chat)
     chat.get_previous_chat = MethodType(get_previous_chat, chat)
     chat.get_next_chat = MethodType(get_next_chat, chat)
+    chat.room = PatchedRoom(chat.room.id, chat.room.name, chat._ChatContext__api)
     return chat
 
 def has_param(func):
