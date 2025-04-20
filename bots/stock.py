@@ -2,7 +2,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 import io
 import json
-from Addon import *
+from addon import *
 
 @has_param
 def create_stock_image(chat):

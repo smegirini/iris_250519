@@ -1,7 +1,6 @@
-from Addon import *
+from addon import *
 from helper.ImageHelper import ImageHelper as ih
 from irispy2 import ChatContext
-from Addon import *
 
 def reply_photo(chat: ChatContext):
     match chat.message.command:

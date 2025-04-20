@@ -9,7 +9,7 @@ from bots.replyphoto import reply_photo
 from bots.text2image import draw_text
 from bots.coin import get_coin_info
 
-from Addon import *
+from addon import *
 from helper.BanControl import ban_user, unban_user
 from helper.BotManager import BotManager
 from kakaolink import IrisLink
