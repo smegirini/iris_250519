@@ -86,6 +86,8 @@ systemd와 같은 서비스 관리자 없이 봇을 직접 실행하는 경우:
     export GEMINI_KEY="YOUR_ACTUAL_GEMINI_KEY"
     export X_NAVER_CLIENT_ID="YOUR_NAVER_CLIENT_ID"
     export X_NAVER_CLIENT_SECRET="YOUR_NAVER_CLIENT_SECRET"
+    export KAKAOLINK_APP_KEY="YOUR_KAKAOLINK_JAVASCRIPT_APP_KEY"
+    export KAKAOLINK_ORIGIN="YOUR KAKAOLINK ORIGIN"
     ```
 3.  파일을 저장하고 (`nano`에서 Ctrl+x y Enter) 편집기를 종료합니다 (Ctrl+X).
 4.  `source ~/.bashrc` 명령어를 실행하거나 새 터미널 세션을 시작하여 변경 사항을 적용합니다.
@@ -104,6 +106,8 @@ systemd와 같은 서비스 관리자 없이 봇을 직접 실행하는 경우:
         GEMINI_KEY="YOUR_ACTUAL_GEMINI_KEY"
         X_NAVER_CLIENT_ID="YOUR_NAVER_CLIENT_ID"
         X_NAVER_CLIENT_SECRET="YOUR_NAVER_CLIENT_SECRET"
+        KAKAOLINK_APP_KEY="YOUR_KAKAOLINK_JAVASCRIPT_APP_KEY"
+        KAKAOLINK_ORIGIN="YOUR KAKAOLINK ORIGIN"
         ```
     *   systemd 서비스 파일을 편집합니다:
         ```bash
@@ -150,6 +154,8 @@ systemd와 같은 서비스 관리자 없이 봇을 직접 실행하는 경우:
       -e GEMINI_KEY="YOUR_ACTUAL_GEMINI_KEY" \
       -e X_NAVER_CLIENT_ID="YOUR_NAVER_CLIENT_ID" \
       -e X_NAVER_CLIENT_SECRET="YOUR_NAVER_CLIENT_SECRET" \
+      -e KAKAOLINK_APP_KEY="YOUR_KAKAOLINK_JAVASCRIPT_APP_KEY" \
+      -e KAKAOLINK_ORIGIN="YOUR KAKAOLINK ORIGIN" \
       YOUR_BOT_IMAGE_NAME
     ```
 *   **옵션 C: `docker-compose.yml` 사용**
@@ -172,6 +178,8 @@ systemd와 같은 서비스 관리자 없이 봇을 직접 실행하는 경우:
         #   GEMINI_KEY: "YOUR_ACTUAL_GEMINI_KEY"
         #   X_NAVER_CLIENT_ID: "YOUR_NAVER_CLIENT_ID"
         #   X_NAVER_CLIENT_SECRET: "YOUR_NAVER_CLIENT_SECRET"
+        #   KAKAOLINK_APP_KEY="YOUR_KAKAOLINK_JAVASCRIPT_APP_KEY"
+        #   KAKAOLINK_ORIGIN="YOUR KAKAOLINK ORIGIN"
         # 필요한 경우 볼륨이나 포트 추가
         # volumes:
         #   - .:/app
