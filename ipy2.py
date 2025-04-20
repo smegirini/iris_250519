@@ -6,12 +6,15 @@ from bots.stock import create_stock_image
 from bots.imagen import get_imagen
 from bots.lyrics import get_lyrics, find_lyrics
 from bots.replyphoto import reply_photo
+from bots.text2image import draw_text
+from bots.coin import get_coin_info
+
 from Addon import *
 from helper.BanControl import ban_user, unban_user
 from helper.BotManager import BotManager
-from bots.text2image import draw_text
-from bots.coin import get_coin_info
-import sys
+
+from detect_nickname_change import detect_nickname_change
+import sys, multiprocessing
 
 iris_url = sys.argv[1]
 bot = BotManager(iris_url).get_current_bot()
@@ -91,6 +94,7 @@ def on_error(err: ErrorContext):
     print(err.event, "이벤트에서 오류가 발생했습니다", err.exception)
     #sys.stdout.flush()
 
-
 if __name__ == "__main__":
+    process = multiprocessing.Process(target=detect_nickname_change, args=(iris_url,))
+    process.start()
     bot.run()
