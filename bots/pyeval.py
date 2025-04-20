@@ -23,7 +23,7 @@ def python_eval(chat: ChatContext):
 
 @is_admin
 @has_param
-def real_eval(chat: ChatContext):
+def real_eval(chat: ChatContext, kl):
     try:
         exec(chat.message.msg[5:])
     except Exception as e:
