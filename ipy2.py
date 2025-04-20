@@ -12,6 +12,7 @@ from bots.coin import get_coin_info
 from Addon import *
 from helper.BanControl import ban_user, unban_user
 from helper.BotManager import BotManager
+from kakaolink import IrisLink
 
 from detect_nickname_change import detect_nickname_change
 import sys, threading
@@ -69,8 +70,17 @@ def on_message(chat: ChatContext):
             case "!코인" | "!내코인" | "!바낸" | "!김프" | "!달러" | "!코인등록" | "!코인삭제":
                 get_coin_info(chat)
                 
-            case "!와":
-                chat.reply("느려")
+            case "!link":
+                kl.send(
+                    receiver_name="카카오톡 봇 커뮤니티 | 카봇커",
+                    template_id=23685,
+                    template_args={
+                        "SC" : 1,
+                        "ww" : 621,
+                        "hh" : 622,
+                        "image" : "https://open.kakaocdn.net/dn/bdvkYd/wpzosdiTW7/nhKHAf2dMyyGx1ioFbHaPk/img.jpg"
+                        },
+                )
             
     except Exception as e :
         print(e)
@@ -98,6 +108,9 @@ def on_error(err: ErrorContext):
     #sys.stdout.flush()
 
 if __name__ == "__main__":
-    thread = threading.Thread(target=detect_nickname_change, args=(iris_url,))
-    thread.start()
+    #닉네임감지를 사용하지 않는 경우 주석처리
+    nickname_detect_thread = threading.Thread(target=detect_nickname_change, args=(iris_url,))
+    nickname_detect_thread.start()
+    #카카오링크를 사용하지 않는 경우 주석처리
+    kl = IrisLink(iris_url)
     bot.run()
