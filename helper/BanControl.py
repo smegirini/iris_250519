@@ -1,4 +1,4 @@
-from Addon import *
+from addon import *
 from irispy2 import ChatContext
 from helper.BotManager import BotManager
 

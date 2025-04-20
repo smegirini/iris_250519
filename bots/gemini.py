@@ -3,7 +3,7 @@ from google.genai import types
 from PIL import Image
 from io import BytesIO
 from helper.ImageHelper import ImageHelper as ih
-from Addon import *
+from addon import *
 from irispy2 import ChatContext
 import os, io
 
