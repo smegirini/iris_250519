@@ -108,7 +108,9 @@ def on_error(err: ErrorContext):
     #sys.stdout.flush()
 
 if __name__ == "__main__":
+    #닉네임감지를 사용하지 않는 경우 주석처리
     nickname_detect_thread = threading.Thread(target=detect_nickname_change, args=(iris_url,))
     nickname_detect_thread.start()
+    #카카오링크를 사용하지 않는 경우 주석처리
     kl = IrisLink(iris_url)
     bot.run()
