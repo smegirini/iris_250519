@@ -30,8 +30,8 @@ def on_message(chat: ChatContext):
             case "!hhi":
                 chat.reply(f"Hello {chat.sender.name}")
 
-            case "!tt" | "!ttt" | "!프사":
-                reply_photo(chat)
+            case "!tt" | "!ttt" | "!프사" | "!프사링":
+                reply_photo(chat, kl)
 
             #make your own help.png or remove !iris
             case "!iris":
@@ -69,18 +69,6 @@ def on_message(chat: ChatContext):
             
             case "!코인" | "!내코인" | "!바낸" | "!김프" | "!달러" | "!코인등록" | "!코인삭제":
                 get_coin_info(chat)
-                
-            case "!link":
-                kl.send(
-                    receiver_name="카카오톡 봇 커뮤니티 | 카봇커",
-                    template_id=23685,
-                    template_args={
-                        "SC" : 1,
-                        "ww" : 621,
-                        "hh" : 622,
-                        "image" : "https://open.kakaocdn.net/dn/bdvkYd/wpzosdiTW7/nhKHAf2dMyyGx1ioFbHaPk/img.jpg"
-                        },
-                )
             
     except Exception as e :
         print(e)
