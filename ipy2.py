@@ -68,6 +68,9 @@ def on_message(chat: ChatContext):
             
             case "!코인" | "!내코인" | "!바낸" | "!김프" | "!달러" | "!코인등록" | "!코인삭제":
                 get_coin_info(chat)
+                
+            case "!와":
+                chat.reply("느려")
             
     except Exception as e :
         print(e)
