@@ -29,11 +29,10 @@ def send_avatar_kakaolink(chat: ChatContext, kl):
     avatar = chat.get_source().sender.avatar
     kl.send(
         receiver_name=chat.room.name,
-        template_id=23685,
+        template_id=3139,
         template_args={
-            "SC" : 0,
-            "ww" : avatar.img.width,
-            "hh" : avatar.img.height,
-            "image" : avatar.url
+            "IMAGE_WIDTH" : avatar.img.width,
+            "IMAGE_HEIGHT" : avatar.img.height,
+            "IMAGE_URL" : avatar.url
             },
     )
