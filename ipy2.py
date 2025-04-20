@@ -14,7 +14,7 @@ from helper.BanControl import ban_user, unban_user
 from helper.BotManager import BotManager
 
 from detect_nickname_change import detect_nickname_change
-import sys, multiprocessing
+import sys, threading
 
 iris_url = sys.argv[1]
 bot = BotManager(iris_url).get_current_bot()
@@ -95,6 +95,6 @@ def on_error(err: ErrorContext):
     #sys.stdout.flush()
 
 if __name__ == "__main__":
-    process = multiprocessing.Process(target=detect_nickname_change, args=(iris_url,))
-    process.start()
+    thread = threading.Thread(target=detect_nickname_change, args=(iris_url,))
+    thread.start()
     bot.run()
