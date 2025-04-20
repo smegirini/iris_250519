@@ -4,3 +4,4 @@ requests
 google-genai
 irispy2
 pytz
+httpx
