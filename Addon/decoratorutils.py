@@ -1,6 +1,6 @@
 from irispy2 import ChatContext
 from helper.BotManager import BotManager
-from .patchclass import Avatar, PatchedRoom
+from .patchclass import *
 from .decoratorutils import *
 from helper.DatabaseHelper import *
 from types import MethodType
@@ -22,7 +22,9 @@ def add_chat_addon(chat):
     chat.message.has_param = len(param) > 0
     chat.message.param = param[0] if chat.message.has_param else None
     chat.message.attachment = load_attachment(chat)
-    chat.sender.avatar = Avatar(chat.sender.id, chat._ChatContext__api)
+    if chat.sender.id < 10000000000:
+        chat.sender = PatchedUser(chat.sender.id, chat.room.id, chat._ChatContext__api)
+    chat.sender.avatar = Avatar(chat.sender.id, chat.room.id, chat._ChatContext__api)
     chat.api = chat._ChatContext__api
     chat.get_source = MethodType(get_source, chat)
     chat.get_previous_chat = MethodType(get_previous_chat, chat)
