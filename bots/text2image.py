@@ -3,8 +3,8 @@ from PIL import Image, ImageFont, ImageDraw
 import requests, random, os
 from io import BytesIO, BufferedReader
 from bots.gemini import get_gemini_vision_analyze_image
-from helper.ImageHelper import ImageHelper as ih
-from helper.BotManager import BotManager
+from helper import ih
+from helper import BotManager
 from addon import *
 from irispy2 import ChatContext
 

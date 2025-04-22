@@ -21,7 +21,6 @@ class ImageHelper:
                 urls.append(chat.message.attachment["url"])
             return urls
         except Exception as e:
-            print(e)
             return None
 
     @classmethod

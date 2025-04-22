@@ -2,7 +2,7 @@ import requests
 import datetime
 import pytz
 from irispy2 import ChatContext
-from helper.BotManager import BotManager
+from helper import BotManager
 
 all_url = "https://api.upbit.com/v1/market/all"
 base_url = "https://api.upbit.com/v1/ticker?markets="

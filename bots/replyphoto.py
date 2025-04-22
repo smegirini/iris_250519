@@ -1,5 +1,5 @@
 from addon import *
-from helper.ImageHelper import ImageHelper as ih
+from helper import ih
 from irispy2 import ChatContext
 
 def reply_photo(chat: ChatContext, kl):

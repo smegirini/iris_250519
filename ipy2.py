@@ -11,7 +11,7 @@ from bots.coin import get_coin_info
 
 from addon import *
 from helper.BanControl import ban_user, unban_user
-from helper.BotManager import BotManager
+from helper import BotManager
 from kakaolink import IrisLink
 
 from detect_nickname_change import detect_nickname_change
