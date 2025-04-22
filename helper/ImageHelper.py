@@ -8,24 +8,31 @@ class ImageHelper:
     image_directory = "res/temppic/"
     
     @classmethod
-    def get_photo_url(cls, chat) -> str:        
+    def get_photo_url(cls, chat) -> list:        
         try:
+            urls = []
             if chat.message.type == 71:
-                url = chat.message.attachment["C"]["THL"][0]["TH"]["THU"]
+                for item in chat.message.attachment["C"]["THL"]:
+                    urls.append(item["TH"]["THU"])
             elif chat.message.type == 27:
-                url = chat.message.attachment["imageUrls"][0]
+                for item in chat.message.attachment["imageUrls"]:
+                    urls.append(item)
             else:
-                url = chat.message.attachment["url"]
-            return url
+                urls.append(chat.message.attachment["url"])
+            return urls
         except Exception as e:
             print(e)
             return None
 
     @classmethod
-    def download_img_from_url(cls, url):
+    def download_img_from_url(cls, urls) -> list:
         try:
-            res = requests.get(url)
-            return res.content
+            if type(urls) == str:
+                urls = [urls]
+            result = []
+            for url in urls:
+                result.append(requests.get(url).content)
+            return result
         except Exception as e:
             print(e)
             return None
@@ -43,16 +50,22 @@ class ImageHelper:
             return None
 
     @classmethod
-    def send_image(cls, chat, img):
-        buffered_reader = cls.image_to_buffered_reader(img)
+    def send_image(cls, chat, imgs: list):
+        if type(imgs) == str:
+            imgs = [imgs]
+        result = []
+        for img in imgs:
+            buffered_reader = cls.image_to_buffered_reader(img)
+            result.append(buffered_reader)
+            
         chat.reply_media(
             "IMAGE",
-            [buffered_reader]
+            result
         )
 
     @classmethod
     def get_image_from_url(cls, url: str) -> Image:
-        response = cls.download_img_from_url(url)
+        response = cls.download_img_from_url(url)[0]
         img = Image.open(BytesIO(response))
         img = img.convert("RGBA")
         return img

@@ -19,6 +19,7 @@ class BotManager:
             self.kv.open('res/ipy.db')
             self.bot = Bot(iris_url)
             self._initialized = True
+        self.bot_id = self.bot.api.get_info()["bot_id"]
 
     def get_current_bot(self):
         return self.bot
