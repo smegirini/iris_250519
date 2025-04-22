@@ -1,5 +1,5 @@
 from irispy2.bot.models import Message
-from helper.BotManager import BotManager
+from helper import BotManager
 
 def get_reply_user_id(message: Message):
     reply_chat = get_reply_chat(message)

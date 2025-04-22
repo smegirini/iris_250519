@@ -2,8 +2,8 @@ from irispy2.bot._internal.iris import IrisAPI
 from functools import cached_property
 from dataclasses import dataclass, field
 import typing as t
-from helper.ImageHelper import ImageHelper as ih
-from helper.BotManager import BotManager
+from helper import ih
+from helper import BotManager
 
 @dataclass(repr=False)
 class Avatar:

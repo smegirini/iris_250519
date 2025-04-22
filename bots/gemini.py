@@ -2,7 +2,7 @@ from google import genai
 from google.genai import types
 from PIL import Image
 from io import BytesIO
-from helper.ImageHelper import ImageHelper as ih
+from helper import ih
 from addon import *
 from irispy2 import ChatContext
 import os, io

@@ -1,6 +1,6 @@
 from addon import *
 from irispy2 import ChatContext
-from helper.BotManager import BotManager
+from helper import BotManager
 
 @is_admin
 @is_reply

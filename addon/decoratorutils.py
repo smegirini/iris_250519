@@ -1,5 +1,5 @@
 from irispy2 import ChatContext
-from helper.BotManager import BotManager
+from helper import BotManager
 from .patchclass import *
 from .decoratorutils import *
 from helper.DatabaseHelper import *
