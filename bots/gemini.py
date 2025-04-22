@@ -108,8 +108,11 @@ def get_gemini_image_to_image(chat : ChatContext):
     try:
         msg = chat.message.param
         src_chat = chat.get_source()
-        photo_url = ih.get_photo_url(src_chat)
-        img = ih.download_img_from_url(photo_url)
+        if hasattr(src_chat, "image"):
+            photo_url = src_chat.image.url[0]
+        else:
+            return
+        img = ih.download_img_from_url(photo_url)[0]
         filepath = ih.save_img(img)
 
         client = genai.Client(
@@ -166,13 +169,14 @@ def get_gemini_image_to_image(chat : ChatContext):
 @is_reply
 def get_gemini_vision_analyze_image_reply(chat: ChatContext):
     src_chat = chat.get_source()
-    photo_url = ih.get_photo_url(src_chat)
-    check_result = get_gemini_vision_analyze_image(photo_url)
-    chat.reply(check_result)
+    if hasattr(src_chat, "image"):
+        photo_url = src_chat.image.url[0]
+        check_result = get_gemini_vision_analyze_image(photo_url)
+        chat.reply(check_result)
 
 def get_gemini_vision_analyze_image(url):
     client = genai.Client(api_key=pro_key)
-    image = Image.open(io.BytesIO(ih.download_img_from_url(url)))
+    image = Image.open(io.BytesIO(ih.download_img_from_url(url)[0]))
     res = client.models.generate_content(
         model="gemini-2.0-flash-exp-image-generation",
         config=types.GenerateContentConfig(

@@ -22,14 +22,17 @@ def add_chat_addon(chat):
     chat.message.has_param = len(param) > 0
     chat.message.param = param[0] if chat.message.has_param else None
     chat.message.attachment = load_attachment(chat)
-    if chat.sender.id < 10000000000:
-        chat.sender = PatchedUser(chat.sender.id, chat.room.id, chat._ChatContext__api)
+    chat.sender = PatchedUser(id=chat.sender.id, chat_id=chat.room.id, api=chat._ChatContext__api, name=chat.sender.name)
     chat.sender.avatar = Avatar(chat.sender.id, chat.room.id, chat._ChatContext__api)
     chat.api = chat._ChatContext__api
     chat.get_source = MethodType(get_source, chat)
     chat.get_previous_chat = MethodType(get_previous_chat, chat)
     chat.get_next_chat = MethodType(get_next_chat, chat)
     chat.room = PatchedRoom(chat.room.id, chat.room.name, chat._ChatContext__api)
+    if chat.message.type in [71,27,2]:
+        image = PatchedImage(chat)
+        if image.url:
+            chat.image = image
     return chat
 
 def get_source(self):
