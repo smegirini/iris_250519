@@ -257,12 +257,14 @@ class KakaoLink:
         authorized = await self._check_authorized(client)
         if authorized:
             return
+        print("not authorized ")
 
         tgt_token = await self._get_tgt_token(client, authorization)
         await self._submit_tgt_token(client, tgt_token)
 
         authorized = await self._check_authorized(client)
         if not authorized:
+            print("not authorized. printing self._cookies: ", self._cookies)
             logger.error(
                 "카카오링크 로그인: 알 수 없는 이유로 로그인이 되지 않았습니다 (%s)",
                 stack_info=True,
@@ -381,8 +383,12 @@ class KakaoLink:
 
         res_json: dict = res.json()
         result: dict = res_json.get("result", {})
-
-        return result.get("status") == "VALID"
+        
+        if result.get("status") == "VALID":
+            return True
+        else:
+            print(result.get("status"))
+            return False
 
     async def _submit_tgt_token(self, client: httpx.AsyncClient, tgt_token: str):
         res = await client.get(
@@ -392,6 +398,10 @@ class KakaoLink:
                 "ka-tgt": tgt_token,
             },
         )
+        print("headers:")
+        print(self._get_web_headers())
+        print("tgt result:")
+        print(res.text)
 
         res.raise_for_status()
 
@@ -409,6 +419,7 @@ class KakaoLink:
         )
 
         res_json: dict = res.json()
+        print(res_json)
 
         if res_json.get("code") != 0:
             logger.error(
