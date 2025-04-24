@@ -151,18 +151,19 @@ def add_default_text(chat, img, txt):
         color = '#' + option_split[1]
     else:
         color = '#ffffff'
+    
+    draw = ImageDraw.Draw(img)
 
     fontsize = get_max_font_size(img.size[0],"아"*10, RES_PATH+'GmarketSansBold.otf', max_search_size=500)
     font = ImageFont.FreeTypeFont(RES_PATH+'GmarketSansBold.otf', fontsize)
     
-    draw = ImageDraw.Draw(img)
-    w, h = multiline_textsize(txt,font=font)
+    w, h = multiline_textsize(txt, font)
     
-    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/20)-1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/20)-1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/20)+1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/20)+1), u'%s' % txt, font=font, align='center', fill="black")
-    draw.multiline_text((img.size[0]/2-w/2, img.size[1]-h-(img.size[1]/20)), u'%s' % txt, font=font, align='center', fill=color)
+    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/20)-1), u'%s' % txt, font=font, align='center', fill="black", spacing=10)
+    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/20)-1), u'%s' % txt, font=font, align='center', fill="black", spacing=10)
+    draw.multiline_text((img.size[0]/2-w/2-1, img.size[1]-h-(img.size[1]/20)+1), u'%s' % txt, font=font, align='center', fill="black", spacing=10)
+    draw.multiline_text((img.size[0]/2-w/2+1, img.size[1]-h-(img.size[1]/20)+1), u'%s' % txt, font=font, align='center', fill="black", spacing=10)
+    draw.multiline_text((img.size[0]/2-w/2, img.size[1]-h-(img.size[1]/20)), u'%s' % txt, font=font, align='center', fill=color, spacing=10)
     
     send_image(chat, img)
     
@@ -224,7 +225,7 @@ def get_max_font_size(image_width, text, font_path, max_search_size=500):
     while low <= high:
         mid = (low + high) // 2
         font = ImageFont.FreeTypeFont(font_path, mid)
-        w, h = multiline_textsize(text, font=font)
+        w, h = multiline_textsize(text, font)
 
         if w <= target_width:
             best_size = mid
@@ -234,7 +235,17 @@ def get_max_font_size(image_width, text, font_path, max_search_size=500):
 
     return best_size
 
-def multiline_textsize(text,font):
+def multiline_textsize(text, font):
+    dummy_img = Image.new('RGB', (1, 1), color = 'white')
+    dummy_draw = ImageDraw.Draw(dummy_img)
+    bbox = dummy_draw.textbbox((0, 0), text, font=font, align='center', spacing=10)
+    w = bbox[2] - bbox[0]
+    h = bbox[3] - bbox[1]
+
+    return (w, h)
+
+
+def multiline_textsize_old(text,font):
     total_width = 0
     total_height = 0
 
@@ -247,4 +258,4 @@ def multiline_textsize(text,font):
         total_width = max(total_width, w)
         total_height += h
 
-    return (w, h)
+    return (total_width, total_height)
