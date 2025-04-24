@@ -1,6 +1,6 @@
-import requests
 import time, datetime
 from helper import BotManager
+import pytz
 
 detect_rooms = ["18398338829933617"]
 refresh_second = 3
@@ -44,11 +44,13 @@ def detect_nickname_change(base_url):
                 user = history[user_id]["history"][-1]
                 new_user = members[user_id]
                 if user["nickname"] != new_user["nickname"]:
+                    korean = pytz.timezone('Asia/Seoul')
+                    time_string = datetime.datetime.now(korean).strftime("%y%m%d %H:%M")
                     history[user_id]["history"].append(
                         {
                             "nickname":new_user["nickname"],
                             "involved_chat_id":new_user["involved_chat_id"],
-                            "date":datetime.datetime.now().strftime("%Y-%m-%d")
+                            "date":time_string
                         }
                     )
                     
@@ -62,7 +64,7 @@ def detect_nickname_change(base_url):
                         
                         message = f"닉네임이 변경되었어요!\n{user['nickname']} -> {new_user['nickname']}\n" + "\u200b"*600 + "\n" + history_string
                         
-                        bot.api.reply(int(new_user["involved_chat_id"]),message)
+                        bot.api.reply(int(new_user["involved_chat_id"]),message.strip())
                     changed = True
             if changed:
                 kv.put('user_history',history)
