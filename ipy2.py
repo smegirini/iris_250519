@@ -14,7 +14,7 @@ from helper.BanControl import ban_user, unban_user
 from helper import BotManager
 from kakaolink import IrisLink
 
-from detect_nickname_change import detect_nickname_change
+from bots.detect_nickname_change import detect_nickname_change
 import sys, threading
 
 iris_url = sys.argv[1]
