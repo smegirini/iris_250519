@@ -11,3 +11,4 @@ bots/__pycache__
 pyproject.toml
 uv.lock
 .python-version
+.idea

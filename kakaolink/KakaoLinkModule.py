@@ -8,6 +8,7 @@ from uuid import uuid4
 from urllib.parse import quote
 import typing as t
 import httpx
+import requests
 
 logger = logging.getLogger("KakaoLink")
 
@@ -36,27 +37,33 @@ class KakaoLinkSendExcepetion(KakaoLinkException):
     pass
 
 
-class IKakaoLinkCookieStorage(abc.ABC):
-    @abc.abstractmethod
-    async def save(self, cookies: dict):
-        pass
+class KakaoLinkCookieStorage:
+    def __init__(self):
+        self.local_storage = {}
 
-    @abc.abstractmethod
-    async def load(self) -> dict | None:
-        pass
+    async def save(self, cookies):
+        self.local_storage = cookies
 
+    async def load(self):
+        return self.local_storage
+    
+    def clear(self):
+        self.local_storage = {}
 
-class IKakaoLinkAuthorizationProvider(abc.ABC):
-    @abc.abstractmethod
+class KakaoLinkAuthorizationProvider:
+    def __init__(self, iris_url: str):
+        self.iris_url = iris_url
+        
     async def get_authorization(self) -> str:
-        pass
+        aot = requests.get(f"{self.iris_url}/aot").json()["aot"]
+        access_token = f"{aot['access_token']}-{aot['d_id']}"
+        return access_token
 
 
 class KakaoLink:
     def __init__(
         self,
-        cookie_storage: IKakaoLinkCookieStorage,
-        authorization_provider: IKakaoLinkAuthorizationProvider,
+        iris_url: str,
         default_app_key: str | None = None,
         default_origin: str | None = None,
     ):
@@ -65,8 +72,8 @@ class KakaoLink:
 
         self._cookies = {}
         self._send_lock = asyncio.Lock()
-        self._authorization_provider = authorization_provider
-        self._cookie_storage = cookie_storage
+        self._authorization_provider = KakaoLinkAuthorizationProvider(iris_url)
+        self._cookie_storage = KakaoLinkCookieStorage()
 
     async def send(
         self,
@@ -253,24 +260,24 @@ class KakaoLink:
 
     async def _login(self, client: httpx.AsyncClient):
         authorization = await self._authorization_provider.get_authorization()
+        self._cookies = {}
+        self._cookie_storage.clear()
+        client.cookies.clear()
 
         authorized = await self._check_authorized(client)
         if authorized:
             return
-        print("not authorized ")
 
         tgt_token = await self._get_tgt_token(client, authorization)
         await self._submit_tgt_token(client, tgt_token)
 
         authorized = await self._check_authorized(client)
         if not authorized:
-            print("not authorized. printing self._cookies: ", self._cookies)
             logger.error(
                 "카카오링크 로그인: 알 수 없는 이유로 로그인이 되지 않았습니다 (%s)",
                 stack_info=True,
             )
-            raise KakaoLinkLoginExcepetion()
-
+        
         self._cookies = dict(client.cookies)
         await self._cookie_storage.save(self._cookies)
 
@@ -387,7 +394,6 @@ class KakaoLink:
         if result.get("status") == "VALID":
             return True
         else:
-            print(result.get("status"))
             return False
 
     async def _submit_tgt_token(self, client: httpx.AsyncClient, tgt_token: str):
@@ -398,10 +404,6 @@ class KakaoLink:
                 "ka-tgt": tgt_token,
             },
         )
-        print("headers:")
-        print(self._get_web_headers())
-        print("tgt result:")
-        print(res.text)
 
         res.raise_for_status()
 
@@ -419,7 +421,6 @@ class KakaoLink:
         )
 
         res_json: dict = res.json()
-        print(res_json)
 
         if res_json.get("code") != 0:
             logger.error(

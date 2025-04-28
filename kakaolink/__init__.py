@@ -1,41 +1,17 @@
 import asyncio
-import requests
-from .KakaoLinkModule import IKakaoLinkCookieStorage, IKakaoLinkAuthorizationProvider, KakaoLink
+from .KakaoLinkModule import KakaoLink
 import os
 import typing as t
-
-class KakaoLinkCookieStorage(IKakaoLinkCookieStorage):
-    def __init__(self):
-        self.local_storage = {}
-
-    async def save(self, cookies):
-        self.local_storage = cookies
-
-    async def load(self):
-        return self.local_storage
-
-class KakaoTalkAuthorizationProvider(IKakaoLinkAuthorizationProvider):
-    def __init__(self, iris_url: str):
-        self.iris_url = iris_url
-        
-    async def get_authorization(self) -> str:
-        aot = requests.get(f"{self.iris_url}/aot").json()["aot"]
-        access_token = f"{aot['access_token']}-{aot['d_id']}"
-        print("got access token: ", access_token)
-        return access_token
 
 class IrisLink:
     def __init__(
         self,
         iris_url: str,
     ):
-        self.cookie_storage = KakaoLinkCookieStorage()
-        self.authorization_provider = KakaoTalkAuthorizationProvider(iris_url)
         self.client = KakaoLink(
+            iris_url=iris_url,
             default_app_key=os.environ.get("KAKAOLINK_APP_KEY"),
             default_origin=os.environ.get("KAKAOLINK_ORIGIN"),
-            authorization_provider=self.authorization_provider,
-            cookie_storage=self.cookie_storage,
         )
         asyncio.run(self.client.init())
         
