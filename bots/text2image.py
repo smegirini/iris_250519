@@ -60,7 +60,7 @@ def draw_default(chat):
                 img = get_image_from_url(url)
                 txt = msg_split[2]
                 check = get_gemini_vision_analyze_image(url)
-                print(f"check result: {"True" if "True" in check else "False"}")
+                print(f'check result: {"True" if "True" in check else "False"}')
             
             case _:
                 return None
