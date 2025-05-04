@@ -2,6 +2,6 @@ pillow
 gemini_webapi
 requests
 google-genai
-irispy2
+irispy2==3.4.0
 pytz
 httpx

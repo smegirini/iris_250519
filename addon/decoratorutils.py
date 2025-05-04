@@ -29,7 +29,7 @@ def add_chat_addon(chat):
     chat.get_previous_chat = MethodType(get_previous_chat, chat)
     chat.get_next_chat = MethodType(get_next_chat, chat)
     chat.room = PatchedRoom(chat.room.id, chat.room.name, chat._ChatContext__api)
-    if chat.message.type in [71,27,2]:
+    if chat.message.type in [71,27,2,71+16384,27+16384,2+16384]:
         image = PatchedImage(chat)
         if image.url:
             chat.image = image
