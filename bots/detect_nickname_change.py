@@ -72,4 +72,4 @@ def detect_nickname_change(base_url):
             print("something went wrong")
             print(e)
         
-            time.sleep(refresh_second)
+        time.sleep(refresh_second)
