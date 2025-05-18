@@ -97,10 +97,19 @@ def get_youtube_summary(url: str) -> str:
     model = genai.GenerativeModel('gemini-2.0-flash-exp')
     try:
         response = model.generate_content(prompt)
-        return response.text
+        if response and hasattr(response, 'text') and response.text:
+            return response.text
+        else:
+            return "Gemini 요약 결과가 없습니다."
     except Exception as e:
         return f"Gemini 요약 생성 중 오류: {str(e)}"
 
 async def get_youtube_summary_async(url: str) -> str:
-    loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(_executor, get_youtube_summary, url) 
+    try:
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(_executor, get_youtube_summary, url)
+        if result is None:
+            return "유튜브 요약 결과가 없습니다."
+        return result
+    except Exception as e:
+        return f"유튜브 요약 중 예외 발생: {str(e)}" 
