@@ -1,5 +1,6 @@
-from irispy2 import ChatContext
-from helper.DatabaseHelper import *
+from iris import ChatContext
+from iris import PyKV
+#from helper.DatabaseHelper import *  # DatabaseHelper는 irispy-client 구조에서는 사용하지 않음
 from .decoratorutils import *
 
 def on_message_chat_addon(func):
@@ -36,7 +37,7 @@ def is_not_banned(func):
         chat: ChatContext = args[0]
         if admin_check(chat):
             return func(*args, **kwargs)
-        kv = BotManager().get_kv()
+        kv = PyKV()
         bans = kv.get('ban')
         if not bans:
             kv.put('ban',[])

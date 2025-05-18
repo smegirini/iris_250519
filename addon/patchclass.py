@@ -1,4 +1,4 @@
-from irispy2.bot._internal.iris import IrisAPI
+from iris.bot._internal.iris import IrisAPI
 from functools import cached_property
 from dataclasses import dataclass, field
 import typing as t

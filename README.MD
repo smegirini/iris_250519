@@ -1,7 +1,4 @@
-
----
-
-# Iris + IrisPy2 기반 샘플 봇
+# Iris + irispy-client(iris) 기반 샘플 봇
 
 ### `2025.04.12 변경사항` : 데코레이터의 불필요한 ()가 제거되었습니다. 기존 사용중인 코드 중 데코레이터를 사용한 코드가 있다면 변경이 필요합니다.
 
@@ -29,8 +26,8 @@
 
     그런 다음, 아래 Python 코드를 실행하세요. `YOUR_ADMIN_USER_ID` 부분을 관리자의 User ID로 바꿔야하며, iris dashboard에서 확인할 수 있습니다:
     ```python
-    from helper.BotManager import BotManager
-    kv = BotManager("a").get_kv()
+    from iris import PyKV
+    kv = PyKV()
     kv.put("admin", [YOUR_ADMIN_USER_ID])
     kv.put("ban", [])
     exit()
@@ -66,7 +63,7 @@
         3.  애플리케이션 설정에서 "검색" API 사용을 추가하고 활성화합니다.
         4.  애플리케이션 상세 정보에서 `Client ID`와 `Client Secret` 값을 복사합니다.
 
-## 환경 변수 적용 방법
+## 환경 변수 적용 방법 (irispy-client 기준)
 
 봇을 배포하고 실행하는 방식에 따라 아래 방법 중 **하나**를 선택하세요:
 

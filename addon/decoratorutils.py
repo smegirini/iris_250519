@@ -1,14 +1,14 @@
-from irispy2 import ChatContext
-from helper import BotManager
+from iris import ChatContext
+from iris import PyKV
 from .patchclass import *
 from .decoratorutils import *
-from helper.DatabaseHelper import *
+#from helper.DatabaseHelper import *  # DatabaseHelper는 irispy-client 구조에서는 사용하지 않음
 from types import MethodType
 import json
-from irispy2.bot.models import Message, Room, User
+from iris.bot.models import Message, Room, User
 
 def admin_check(chat:ChatContext):
-    kv = BotManager().get_kv()
+    kv = PyKV()
     admins = kv.get('admin')
     if not admins:
         kv.put('admin', [])

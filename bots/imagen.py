@@ -1,4 +1,4 @@
-from irispy2 import ChatContext
+from iris import ChatContext
 import asyncio
 from gemini_webapi import GeminiClient
 import time
@@ -14,10 +14,7 @@ def get_imagen(chat: ChatContext):
     images = []
     for file in image_files:
         images.append(open("res/temppic/"+file,"rb"))
-    chat.reply_media(
-        "IMAGE",
-        images
-    )
+    chat.reply_media(images)
 
 async def get_client(msg: str):
     client = GeminiClient(Secure_1PSID, Secure_1PSIDTS, proxy=None)

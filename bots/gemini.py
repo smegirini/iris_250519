@@ -4,7 +4,7 @@ from PIL import Image
 from io import BytesIO
 from helper import ih
 from addon import *
-from irispy2 import ChatContext
+from iris import ChatContext
 import os, io
 
 pro_key = os.getenv("GEMINI_KEY")
@@ -79,7 +79,6 @@ def get_gemini_image(chat : ChatContext):
                 continue
             if chunk.candidates[0].content.parts[0].inline_data:
                 chat.reply_media(
-                "IMAGE",
                 [BytesIO(chunk.candidates[0].content.parts[0].inline_data.data)]
                 )
                 return ""
@@ -143,7 +142,6 @@ def get_gemini_image_to_image(chat : ChatContext):
 
             if chunk.candidates[0].content.parts[0].inline_data:
                 chat.reply_media(
-                "IMAGE",
                 [BytesIO(chunk.candidates[0].content.parts[0].inline_data.data)]
                 )
                 return ""

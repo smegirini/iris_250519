@@ -1,5 +1,5 @@
-from irispy2.bot.models import Message
-from helper import BotManager
+from iris.bot.models import Message
+from iris import PyKV
 
 def get_reply_user_id(message: Message):
     reply_chat = get_reply_chat(message)
@@ -8,78 +8,25 @@ def get_reply_user_id(message: Message):
 
 def get_reply_chat(message: Message):
     try:
-        bot = BotManager().get_current_bot()
+        kv = PyKV()
         src_log_id = message.attachment['src_logId']
-        query = "select * from chat_logs where id = ?"    
-        src_record = bot.api.query(query,[src_log_id])
-        return src_record[0]
+        # chat.api 등으로 쿼리 필요 (irispy-client 구조에 맞게 수정 필요)
+        # query = "select * from chat_logs where id = ?"    
+        # src_record = bot.api.query(query,[src_log_id])
+        # return src_record[0]
+        return None  # TODO: chat.api로 대체 필요
     except Exception as e:
         print(e)
         return None
     
 def get_name_of_user_id(user_id: int):
-    bot = BotManager().get_current_bot()
-    query = "WITH info AS (SELECT ? AS user_id) SELECT COALESCE(open_chat_member.nickname, friends.name) AS name, COALESCE(open_chat_member.enc, friends.enc) AS enc FROM info LEFT JOIN db2.open_chat_member ON open_chat_member.user_id = info.user_id LEFT JOIN db2.friends ON friends.id = info.user_id;"
-    result = bot.api.query(query,[user_id])
-    if len(result) == 0:
-        return None
-    return result[0]['name']
+    # chat.api 등으로 쿼리 필요 (irispy-client 구조에 맞게 수정 필요)
+    return None  # TODO: chat.api로 대체 필요
 
 def get_previous_record(log_id, n: int = 1):
-    bot = BotManager().get_current_bot()
-    if n < 0:
-        raise ValueError("n must be greater than 0")
-    
-    query = """
-        WITH RECURSIVE ChatHistory AS (
-            SELECT *
-            FROM chat_logs
-            WHERE id = ?
-            UNION ALL
-            SELECT c.*
-            FROM chat_logs c
-            JOIN ChatHistory h ON c.id = h.prev_id
-        )
-        SELECT *
-        FROM ChatHistory
-        LIMIT 1 OFFSET ?;
-        """
-    record = bot.api.query(query, [log_id, n])
-    return record[0] if record else None
+    # chat.api 등으로 쿼리 필요 (irispy-client 구조에 맞게 수정 필요)
+    return None  # TODO: chat.api로 대체 필요
 
 def get_next_record(log_id, n: int = 1):
-    n = n - 1
-    if n < -1:
-        raise ValueError("n must be greater than 0")
-    bot = BotManager().get_current_bot()
-    query = """
-        WITH RECURSIVE ChatHistory AS (
-            SELECT
-                *,
-                0 AS depth
-            FROM
-                chat_logs
-            WHERE
-                id = ?
-
-            UNION ALL
-
-            SELECT
-                c.*,
-                h.depth + 1
-            FROM
-                chat_logs c
-            JOIN ChatHistory h ON c.prev_id = h.id
-            WHERE
-                h.depth < 100
-                AND c.prev_id IS NOT NULL  -- Ensure prev_id is not NULL
-                AND h.id IS NOT NULL       -- Ensure h.id is not NULL
-                AND c.id IS NOT NULL       -- Ensure c.id is not NULL
-        )
-        SELECT *
-        FROM ChatHistory
-        WHERE depth = ? + 1
-        LIMIT 1; 
-        """
-    record = bot.api.query(query, [log_id, n])
-    return record[0] if record else None
+    # chat.api 등으로 쿼리 필요 (irispy-client 구조에 맞게 수정 필요)
+    return None  # TODO: chat.api로 대체 필요

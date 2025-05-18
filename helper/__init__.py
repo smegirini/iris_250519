@@ -2,7 +2,7 @@ from .ImageHelper import ImageHelper as ih
 
 import sqlite3
 import json
-from irispy2 import Bot
+from iris import Bot
 import threading
 
 class BotManager:
