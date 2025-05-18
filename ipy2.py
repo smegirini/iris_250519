@@ -1,4 +1,4 @@
-from iris import ChatContext
+from iris import ChatContext, Bot
 from iris.bot.models import ErrorContext
 from bots.gemini import get_gemini
 from bots.pyeval import python_eval, real_eval
@@ -15,17 +15,13 @@ from bots.webpage_summary import get_webpage_summary, get_webpage_summary_async
 
 from iris.decorators import *
 from helper.BanControl import ban_user, unban_user
-from helper import BotManager
-from kakaolink import IrisLink
-
+from iris.kakaolink import IrisLink
 from bots.detect_nickname_change import detect_nickname_change
-import sys, threading
-import re
-import asyncio
-import inspect
+import sys, threading, re, asyncio, inspect
 
 iris_url = sys.argv[1]
-# bot = BotManager(iris_url).get_current_bot()
+bot = Bot(iris_url)
+kl = None  # 전역 선언
 
 # 안전하게 이벤트 루프에서 태스크를 실행하는 함수
 def safe_create_task(coro):
@@ -46,12 +42,11 @@ def reply_auto(chat, *args, **kwargs):
 
 @bot.on_event("message")
 @is_not_banned
-@on_message_chat_addon
 def on_message(chat: ChatContext):
     try:
         # PDF 자동 요약 기능 실행 (명령어 처리 전에 실행)
         auto_pdf_summary(chat)
-        
+
         msg = chat.message.msg.strip()
         # 메시지 전체에서 URL이 어디에 있든 인식 (줄바꿈/띄어쓰기 모두 대응)
         urls = re.findall(r'https?://[^\s]+', msg)
@@ -92,7 +87,6 @@ def on_message(chat: ChatContext):
                         return
             except Exception:
                 video_id = None
-            import asyncio
             if video_id:
                 try:
                     loop = asyncio.get_running_loop()
@@ -111,56 +105,44 @@ def on_message(chat: ChatContext):
                 return
 
         match chat.message.command:
-            
             case "!hhi":
-                reply_auto(chat, f"Hello {chat.sender.name}")
-
+                chat.reply(f"Hello {chat.sender.name}")
             case "!tt" | "!ttt" | "!프사" | "!프사링":
-                reply_photo(chat, kl)
-
-            #make your own help.png or remove !iris
+                if kl is not None:
+                    reply_photo(chat, kl)
+                else:
+                    chat.reply("카카오링크가 활성화되어 있지 않습니다.")
             case "!iris":
-                chat.reply_media([open("res/help.png", "rb")])
-
+                chat.reply_media("res/help.png")
             case "!gi" | "!i2i" | "!분석":
                 get_gemini(chat)
-            
             case "!ipy":
                 python_eval(chat)
-            
             case "!iev":
-                real_eval(chat, kl)
-            
+                if kl is not None:
+                    real_eval(chat, kl)
+                else:
+                    chat.reply("카카오링크가 활성화되어 있지 않습니다.")
             case "!ban":
                 ban_user(chat)
-            
             case "!unban":
                 unban_user(chat)
-
             case "!주식":
                 create_stock_image(chat)
-
             case "!ig":
                 get_imagen(chat)
-            
             case "!가사찾기":
                 find_lyrics(chat)
-
             case "!노래가사":
                 get_lyrics(chat)
-
             case "!텍스트" | "!사진" | "!껄무새" | "!멈춰" | "!지워" | "!진행" | "!말대꾸" | "!텍스트추가":
                 draw_text(chat)
-            
             case "!코인" | "!내코인" | "!바낸" | "!김프" | "!달러" | "!코인등록" | "!코인삭제":
                 get_coin_info(chat)
-            
             case "!pdf" | "!요약" | "!pdf요약":
                 get_pdf_summary(chat)
-            
             case "!pdf추출" | "!pdf데이터":
                 extract_pdf_data(chat)
-            
             case cmd if cmd.startswith("#뉴스"):
                 try:
                     hours_str = cmd[3:].strip()
@@ -174,30 +156,24 @@ def on_message(chat: ChatContext):
                     reply_auto(chat, "올바른 숫자를 입력해주세요 (예: #뉴스1, #뉴스3)")
                 except Exception as e:
                     reply_auto(chat, f"뉴스 수집 중 오류가 발생했습니다: {str(e)}")
-            
-    except Exception as e :
+    except Exception as e:
         print(e)
     finally:
         sys.stdout.flush()
-            
 
 #입장감지
 @bot.on_event("new_member")
 def on_newmem(chat: ChatContext):
-    #chat.reply(f"Hello {chat.sender.name}")
     pass
 
 #퇴장감지
 @bot.on_event("del_member")
 def on_delmem(chat: ChatContext):
-    #chat.reply(f"Bye {chat.sender.name}")
     pass
-
 
 @bot.on_event("error")
 def on_error(err: ErrorContext):
     print(err.event, "이벤트에서 오류가 발생했습니다", err.exception)
-    #sys.stdout.flush()
 
 # 웹/유튜브 요약 비동기 처리 함수
 async def handle_youtube_summary(chat, url):
@@ -209,9 +185,7 @@ async def handle_webpage_summary(chat, url):
     await chat.reply(result)
 
 if __name__ == "__main__":
-    #닉네임감지를 사용하지 않는 경우 주석처리
     nickname_detect_thread = threading.Thread(target=detect_nickname_change, args=(iris_url,))
     nickname_detect_thread.start()
-    #카카오링크를 사용하지 않는 경우 주석처리
     kl = IrisLink(iris_url)
     bot.run()

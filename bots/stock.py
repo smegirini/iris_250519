@@ -2,7 +2,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 import io
 import json
-from addon import *
+from iris.decorators import *
 
 @has_param
 def create_stock_image(chat):
@@ -162,7 +162,7 @@ def create_stock_image(chat):
         new_image.save(img_byte_arr, format='PNG')
         img_byte_arr = io.BytesIO(img_byte_arr.getvalue())
 
-        return chat.reply_media("IMAGE",[img_byte_arr])
+        return chat.reply_media([img_byte_arr])
 
     except requests.exceptions.RequestException as e:
         print(f"Request error: {e}")

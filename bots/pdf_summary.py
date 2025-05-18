@@ -4,7 +4,7 @@ import json
 from io import BytesIO
 import PyPDF2
 from iris import ChatContext
-from addon import *
+from iris.decorators import *
 
 # ChatContext에 load_attachment 메소드 추가
 def load_attachment(chat):

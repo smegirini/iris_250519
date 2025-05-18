@@ -5,7 +5,7 @@ from io import BytesIO, BufferedReader
 from bots.gemini import get_gemini_vision_analyze_image
 from helper import ih
 from iris import PyKV
-from addon import *
+from iris.decorators import *
 from iris import ChatContext
 
 

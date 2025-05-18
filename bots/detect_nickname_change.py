@@ -1,6 +1,6 @@
 import time, datetime
 import sys
-from helper import BotManager
+from iris import Bot, PyKV
 import pytz
 
 detect_rooms = ["18435182482529739","18300699845509107","18317062785073220","18317852760569916","18314764046587380","18318872076615818"]
@@ -8,8 +8,8 @@ refresh_second = 3
 MAX_RETRIES = 3
 
 def detect_nickname_change(base_url):
-    bot = BotManager(base_url).get_current_bot()
-    kv = BotManager().get_kv()
+    bot = Bot(base_url)
+    kv = PyKV()
     query = "select enc,nickname,user_id,involved_chat_id from db2.open_chat_member"
     
     # KV 스토리지 접근 시 예외 처리 추가

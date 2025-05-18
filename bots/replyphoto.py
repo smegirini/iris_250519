@@ -1,5 +1,5 @@
 from iris import ChatContext
-from addon import *
+from iris.decorators import *
 from helper import ih
 
 def reply_photo(chat: ChatContext, kl):

@@ -2,7 +2,7 @@
 import sys
 import subprocess
 from iris import ChatContext
-from addon import *
+from iris.decorators import *
 
 @is_admin
 @has_param

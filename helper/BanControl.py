@@ -1,5 +1,9 @@
+from iris.decorators import is_admin, is_reply
 from iris import ChatContext
 from iris import PyKV
+import os
+
+DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'iris.db')
 
 @is_admin
 @is_reply
@@ -7,7 +11,7 @@ def ban_user(chat: ChatContext):
     replied_chat = chat.get_source()
     reply_user_id = replied_chat.sender.id
     reply_user_name = replied_chat.sender.name
-    kv = PyKV()
+    kv = PyKV(DB_PATH)
     ban_list = kv.get('ban')
     if not ban_list:
         ban_list = []
@@ -25,7 +29,7 @@ def unban_user(chat: ChatContext):
     replied_chat = chat.get_source()
     reply_user_id = replied_chat.sender.id
     reply_user_name = replied_chat.sender.name
-    kv = PyKV()
+    kv = PyKV(DB_PATH)
     ban_list = kv.get('ban')
     if not ban_list:
         ban_list = []
