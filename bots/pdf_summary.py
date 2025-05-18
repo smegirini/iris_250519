@@ -27,7 +27,7 @@ def load_attachment(chat):
 
 # Azure OpenAI API 설정
 AZURE_OPENAI_ENDPOINT = "https://dwf.openai.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview"
-AZURE_OPENAI_API_KEY = "***REMOVED***"
+AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 
 def summarize_pdf_with_gpt(pdf_content, prompt="이 PDF 문서의 내용을 핵심만 간략하게 요약해주세요."):
     """
